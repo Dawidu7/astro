@@ -13,6 +13,7 @@ import {
   TextArea as AriaTextArea,
 } from "react-aria-components"
 import { AiFillCaretDown, AiFillCaretUp } from "react-icons/ai"
+import { BsFillExclamationTriangleFill } from "react-icons/bs"
 import { twMerge } from "tailwind-merge"
 import { Button } from "."
 
@@ -30,7 +31,6 @@ type InputProps =
   | ComponentProps<typeof Text>
 
 const GROUP_CLASSNAME = "relative z-10"
-const DESCRIPTION_CLASSNAME = "text-sm text-zinc-400"
 const ERROR_MESSAGE_CLASSNAME = "text-sm text-red-600"
 
 export default function Input({ type, ...props }: InputProps) {
@@ -63,7 +63,7 @@ function Number({
       <Group className="relative">
         <AriaInput className={inputClass} placeholder=" " />
         <Label className={labelClass}>{label}</Label>
-        <div className="absolute right-0 top-0 flex h-full items-center">
+        <Group className="absolute right-0 top-0 flex h-full items-center">
           <Button
             className="text-zinc-400 data-[hovered]:text-white"
             slot="decrement"
@@ -78,8 +78,9 @@ function Number({
           >
             <AiFillCaretUp />
           </Button>
-        </div>
+        </Group>
       </Group>
+      <Description description={description} />
     </NumberField>
   )
 }
@@ -109,6 +110,7 @@ function Text({
     >
       <AriaInput className={inputClass} placeholder=" " />
       <Label className={labelClass}>{label}</Label>
+      <Description description={description} />
     </TextField>
   )
 }
@@ -136,6 +138,7 @@ function TextArea({
     <TextField className={GROUP_CLASSNAME} onChange={onChange} value={value}>
       <AriaTextArea {...props} className={inputClass} placeholder=" " />
       <Label className={labelClass}>{label}</Label>
+      <Description description={description} />
     </TextField>
   )
 }
@@ -157,4 +160,18 @@ function useClassNames(className: string | undefined, isError: boolean) {
   )
 
   return { labelClass, inputClass }
+}
+
+function Description({
+  description,
+}: {
+  description: React.ReactNode | undefined
+}) {
+  return (
+    description && (
+      <AriaText className="text-sm text-zinc-400" slot="description">
+        {description}
+      </AriaText>
+    )
+  )
 }
