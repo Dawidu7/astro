@@ -31,7 +31,6 @@ type InputProps =
   | ComponentProps<typeof Text>
 
 const GROUP_CLASSNAME = "relative z-10"
-const ERROR_MESSAGE_CLASSNAME = "text-sm text-red-600"
 
 export default function Input({ type, ...props }: InputProps) {
   switch (type) {
@@ -78,9 +77,14 @@ function Number({
           >
             <AiFillCaretUp />
           </Button>
+          {error && (
+            <span className="text-red-600">
+              <BsFillExclamationTriangleFill />
+            </span>
+          )}
         </Group>
       </Group>
-      <Description description={description} />
+      <Info description={description} error={error} />
     </NumberField>
   )
 }
@@ -110,7 +114,12 @@ function Text({
     >
       <AriaInput className={inputClass} placeholder=" " />
       <Label className={labelClass}>{label}</Label>
-      <Description description={description} />
+      {error && (
+        <span className="absolute right-0 top-2 text-red-600">
+          <BsFillExclamationTriangleFill />
+        </span>
+      )}
+      <Info description={description} error={error} />
     </TextField>
   )
 }
@@ -138,7 +147,12 @@ function TextArea({
     <TextField className={GROUP_CLASSNAME} onChange={onChange} value={value}>
       <AriaTextArea {...props} className={inputClass} placeholder=" " />
       <Label className={labelClass}>{label}</Label>
-      <Description description={description} />
+      {error && (
+        <span className="absolute right-0 top-2 text-red-600">
+          <BsFillExclamationTriangleFill />
+        </span>
+      )}
+      <Info description={description} error={error} />
     </TextField>
   )
 }
@@ -162,16 +176,27 @@ function useClassNames(className: string | undefined, isError: boolean) {
   return { labelClass, inputClass }
 }
 
-function Description({
+function Info({
   description,
+  error,
 }: {
   description: React.ReactNode | undefined
+  error: React.ReactNode | undefined
 }) {
   return (
-    description && (
-      <AriaText className="text-sm text-zinc-400" slot="description">
-        {description}
-      </AriaText>
+    (error || description) && (
+      <Group className="flex flex-col">
+        {error && (
+          <AriaText className="text-sm text-red-600" slot="errorMessage">
+            {error}
+          </AriaText>
+        )}
+        {description && (
+          <AriaText className="text-sm text-zinc-400" slot="description">
+            {description}
+          </AriaText>
+        )}
+      </Group>
     )
   )
 }
