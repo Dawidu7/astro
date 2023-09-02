@@ -11,15 +11,15 @@ import {
   Input as AriaInput,
   Label,
   NumberField,
-  Text as AriaText,
   TextField,
   TextArea as AriaTextArea,
 } from "react-aria-components"
 import { AiFillCaretDown, AiFillCaretUp } from "react-icons/ai"
 import { BsFillExclamationTriangleFill } from "react-icons/bs"
 import { twMerge } from "tailwind-merge"
-import { Button } from "."
 import { parseAbsoluteToLocal } from "@internationalized/date"
+import { Button } from "."
+import Info from "./Info"
 
 type DefaultInputProps = {
   className?: string
@@ -246,29 +246,4 @@ function useClassNames(className: string | undefined, isError: boolean) {
   )
 
   return { labelClass, inputClass }
-}
-
-function Info({
-  description,
-  error,
-}: {
-  description: React.ReactNode | undefined
-  error: React.ReactNode | undefined
-}) {
-  return (
-    (error || description) && (
-      <Group className="flex flex-col">
-        {error && (
-          <AriaText className="text-sm text-red-600" slot="errorMessage">
-            {error}
-          </AriaText>
-        )}
-        {description && (
-          <AriaText className="text-sm text-zinc-400" slot="description">
-            {description}
-          </AriaText>
-        )}
-      </Group>
-    )
-  )
 }
