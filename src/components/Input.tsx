@@ -4,7 +4,7 @@ import clsx from "clsx"
 import { useState } from "react"
 import type { ComponentProps } from "react"
 import {
-  DateField,
+  DateField as AriaDateField,
   DateInput,
   DateSegment,
   Group,
@@ -19,6 +19,7 @@ import { AiFillCaretDown, AiFillCaretUp } from "react-icons/ai"
 import { BsFillExclamationTriangleFill } from "react-icons/bs"
 import { twMerge } from "tailwind-merge"
 import { Button } from "."
+import { parseAbsoluteToLocal } from "@internationalized/date"
 
 type DefaultInputProps = {
   className?: string
@@ -29,7 +30,7 @@ type DefaultInputProps = {
 }
 
 type InputProps =
-  | ({ type: "date" } & ComponentProps<typeof Date>)
+  | ({ type: "date" } & ComponentProps<typeof DateField>)
   | ({ type: "number" } & ComponentProps<typeof Number>)
   | ({ type: "textarea" } & ComponentProps<typeof TextArea>)
   | ComponentProps<typeof Text>
@@ -39,7 +40,7 @@ const GROUP_CLASSNAME = "relative z-10"
 export default function Input({ type, ...props }: InputProps) {
   switch (type) {
     case "date":
-      return <Date {...(props as ComponentProps<typeof Date>)} />
+      return <DateField {...(props as ComponentProps<typeof DateField>)} />
     case "number":
       return <Number {...(props as ComponentProps<typeof Number>)} />
     case "textarea":
@@ -49,7 +50,7 @@ export default function Input({ type, ...props }: InputProps) {
   }
 }
 
-function Date({
+function DateField({
   className,
   defaultValue,
   description,
@@ -57,16 +58,24 @@ function Date({
   label,
   ...props
 }: Omit<DefaultInputProps, "matcher"> &
-  Omit<ComponentProps<typeof DateField>, "className" | "onChange" | "value">) {
+  Omit<
+    ComponentProps<typeof AriaDateField>,
+    "className" | "defaultValue" | "onChange" | "value"
+  > & { defaultValue?: Date | string | null }) {
   return (
-    <DateField
+    <AriaDateField
       {...props}
       className={GROUP_CLASSNAME}
-      defaultValue={defaultValue}
+      defaultValue={
+        defaultValue
+          ? parseAbsoluteToLocal(new Date(defaultValue).toISOString())
+          : undefined
+      }
+      granularity="day"
     >
       <DateInput
         className={clsx(
-          "peer flex border-b transition duration-300",
+          "peer flex border-b py-1 transition duration-300",
           error
             ? "border-red-600"
             : "border-zinc-400 focus-within:border-white",
@@ -98,7 +107,7 @@ function Date({
         </span>
       )}
       <Info description={description} error={error} />
-    </DateField>
+    </AriaDateField>
   )
 }
 

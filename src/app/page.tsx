@@ -1,4 +1,5 @@
 import { Button, Input } from "~/components"
+import db from "~/db"
 
 async function action(formData: FormData) {
   "use server"
@@ -6,7 +7,11 @@ async function action(formData: FormData) {
   console.log(formData)
 }
 
-export default function Home() {
+export default async function Home() {
+  const images = await db.query.images.findMany()
+
+  console.log(images)
+
   return (
     <form action={action} className="w-fit space-y-8">
       <Input
@@ -14,6 +19,7 @@ export default function Home() {
         name="name"
         description="Full name."
         // error="Must be a string."
+        defaultValue="John Smith"
       />
       <Input
         label="Age"
@@ -21,6 +27,7 @@ export default function Home() {
         type="number"
         description="Don't be underage."
         // error="Must be >= 18."
+        defaultValue={34}
       />
       <Input
         label="Bio"
@@ -28,6 +35,7 @@ export default function Home() {
         type="textarea"
         description="Tell us more about yourself."
         // error="Must be a string."
+        defaultValue="This is John's Bio."
       />
       <Input
         label="DateOfBirth"
@@ -35,6 +43,7 @@ export default function Home() {
         type="date"
         description="When were you born?"
         // error="Ain't a date, lad."
+        defaultValue={images[0].date}
       />
       <Button type="submit">Click me!</Button>
     </form>
