@@ -4,6 +4,9 @@ import clsx from "clsx"
 import { useState } from "react"
 import type { ComponentProps } from "react"
 import {
+  DateField,
+  DateInput,
+  DateSegment,
   Group,
   Input as AriaInput,
   Label,
@@ -26,6 +29,7 @@ type DefaultInputProps = {
 }
 
 type InputProps =
+  | ({ type: "date" } & ComponentProps<typeof Date>)
   | ({ type: "number" } & ComponentProps<typeof Number>)
   | ({ type: "textarea" } & ComponentProps<typeof TextArea>)
   | ComponentProps<typeof Text>
@@ -34,6 +38,8 @@ const GROUP_CLASSNAME = "relative z-10"
 
 export default function Input({ type, ...props }: InputProps) {
   switch (type) {
+    case "date":
+      return <Date {...(props as ComponentProps<typeof Date>)} />
     case "number":
       return <Number {...(props as ComponentProps<typeof Number>)} />
     case "textarea":
@@ -41,6 +47,59 @@ export default function Input({ type, ...props }: InputProps) {
     default:
       return <Text {...(props as ComponentProps<typeof Text>)} />
   }
+}
+
+function Date({
+  className,
+  defaultValue,
+  description,
+  error,
+  label,
+  ...props
+}: Omit<DefaultInputProps, "matcher"> &
+  Omit<ComponentProps<typeof DateField>, "className" | "onChange" | "value">) {
+  return (
+    <DateField
+      {...props}
+      className={GROUP_CLASSNAME}
+      defaultValue={defaultValue}
+    >
+      <DateInput
+        className={clsx(
+          "peer flex border-b transition duration-300",
+          error
+            ? "border-red-600"
+            : "border-zinc-400 focus-within:border-white",
+        )}
+      >
+        {segment => (
+          <DateSegment
+            className={({ isPlaceholder }) =>
+              clsx(
+                "rounded outline-none transition duration-200 focus-within:bg-indigo-600",
+                isPlaceholder ? "text-zinc-400" : "text-white",
+              )
+            }
+            segment={segment}
+          />
+        )}
+      </DateInput>
+      <Label
+        className={clsx(
+          "absolute top-1 -translate-y-5 text-sm transition duration-300",
+          error ? "text-red-600" : "text-zinc-400 peer-focus-within:text-white",
+        )}
+      >
+        {label}
+      </Label>
+      {error && (
+        <span className="absolute right-0 top-2 text-red-600">
+          <BsFillExclamationTriangleFill />
+        </span>
+      )}
+      <Info description={description} error={error} />
+    </DateField>
+  )
 }
 
 function Number({
@@ -58,7 +117,11 @@ function Number({
   const { inputClass, labelClass } = useClassNames(className, !!error)
 
   return (
-    <NumberField {...props} className={GROUP_CLASSNAME}>
+    <NumberField
+      {...props}
+      className={GROUP_CLASSNAME}
+      defaultValue={defaultValue}
+    >
       <Group className="relative">
         <AriaInput className={inputClass} placeholder=" " />
         <Label className={labelClass}>{label}</Label>
