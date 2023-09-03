@@ -9,7 +9,7 @@ if (!process.env.DATABASE_URL) {
   throw new Error("DATABASE_URL is missing.")
 }
 
-const client = postgres(process.env.DATABASE_URL)
+const client = postgres(process.env.DATABASE_URL, { max: 100 })
 const db = drizzle(client, { schema })
 
 export default db

@@ -1,4 +1,4 @@
-import { Button, Input, Select } from "~/components"
+import { Button, Form, Input, Select } from "~/components"
 import db from "~/db"
 
 async function action(formData: FormData) {
@@ -7,11 +7,9 @@ async function action(formData: FormData) {
   console.log(formData)
 }
 
-export default async function Home() {
-  // console.log(images)
-
+export default function Home() {
   return (
-    <form action={action} className="w-fit space-y-8">
+    <Form action={action} className="w-fit space-y-8">
       <Input
         label="Name"
         name="name"
@@ -46,17 +44,19 @@ export default async function Home() {
       <Select
         label="Image"
         items={db.query.images.findMany()}
+        name="image"
         description="Images. Nice."
       />
       <Select
         label="Animal"
         items={["Cat", "Dog", "Horse"]}
+        name="animal"
         description="You like animals, don't you?"
         search
         // error="Really?!"
         // defaultValue="Dog"
       />
       <Button type="submit">Click me!</Button>
-    </form>
+    </Form>
   )
 }
