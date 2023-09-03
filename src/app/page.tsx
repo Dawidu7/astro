@@ -13,12 +13,7 @@ export default function Home() {
       <Input label="Name" name="name" />
       <Input label="Age" name="age" type="number" />
       <Input label="Bio" name="bio" type="textarea" />
-      <Input
-        label="DateOfBirth"
-        name="dateOfBirth"
-        type="date"
-        description="When were you born?"
-      />
+      <Input label="Date of Birth" name="dateOfBirth" type="date" />
       <Group separator="x">
         <Input
           label="Resolution X"
@@ -26,6 +21,7 @@ export default function Home() {
           type="number"
           step={0.1}
           minValue={0}
+          inputMode="decimal"
         />
         <Input
           label="Resolution Y"
@@ -33,6 +29,7 @@ export default function Home() {
           type="number"
           step={0.1}
           minValue={0}
+          inputMode="decimal"
         />
       </Group>
       <Select label="Image" items={db.query.images.findMany()} name="image" />

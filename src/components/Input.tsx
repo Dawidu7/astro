@@ -117,22 +117,30 @@ function Number({
   description,
   error,
   label,
+  onChange: _onChange,
   ...props
 }: Omit<DefaultInputProps, "matcher"> &
-  Omit<
-    ComponentProps<typeof NumberField>,
-    "className" | "onChange" | "value"
-  >) {
+  Omit<ComponentProps<typeof NumberField>, "className" | "value">) {
   const { inputClass, labelClass } = useClassNames(className, !!error)
+  const [value, setValue] = useState(defaultValue || NaN)
+
+  function onChange(value: any) {
+    setValue(value)
+
+    if (typeof _onChange === "function") {
+      _onChange(value)
+    }
+  }
 
   return (
     <NumberField
       {...props}
       className={GROUP_CLASSNAME}
-      defaultValue={defaultValue}
+      onChange={onChange}
+      value={value}
     >
       <Group className="relative">
-        <AriaInput className={inputClass} placeholder=" " />
+        <AriaInput className={inputClass} placeholder=" " inputMode="text" />
         <Label className={labelClass}>{label}</Label>
         <Group className="absolute right-0 top-0 flex h-full items-center">
           <Button
