@@ -166,6 +166,7 @@ function Text({
   defaultValue,
   description,
   error,
+  onChange: _onChange,
   label,
   ...props
 }: DefaultInputProps &
@@ -175,6 +176,10 @@ function Text({
 
   function onChange(value: string) {
     setValue(value)
+
+    if (typeof _onChange === "function") {
+      _onChange(value)
+    }
   }
 
   return (
@@ -201,10 +206,10 @@ function TextArea({
   defaultValue,
   description,
   error,
+  onChange: _onChange,
   label,
   ...props
-}: DefaultInputProps &
-  Omit<
+}: DefaultInputProps & { onChange: (value: string) => void } & Omit<
     ComponentProps<typeof AriaTextArea>,
     "className" | "onChange" | "placeholder" | "value"
   >) {
@@ -213,6 +218,10 @@ function TextArea({
 
   function onChange(value: string) {
     setValue(value)
+
+    if (typeof _onChange === "function") {
+      _onChange(value)
+    }
   }
 
   return (

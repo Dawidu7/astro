@@ -41,16 +41,25 @@ function _Select<
   error,
   label,
   items: _items,
+  onChange: _onChange,
   ...props
 }: DefaultSelectProps<T> & ComponentProps<typeof Listbox>) {
   const [selected, setSelected] = useState<T | null>(null)
   const items = useItems(_items)
 
+  function onChange(value: T) {
+    setSelected(value)
+
+    if (typeof _onChange === "function") {
+      _onChange(value)
+    }
+  }
+
   useEffect(() => setSelected(defaultValue || null), [defaultValue])
 
   return (
     <div className="relative">
-      <Listbox value={selected} onChange={setSelected} {...props}>
+      <Listbox {...props} value={selected} onChange={onChange}>
         {({ open }) => (
           <>
             <Transition
@@ -138,13 +147,12 @@ function SearchSelect<T extends string | { name: string }>({
   error,
   label,
   items: _items,
+  onChange: _onChange,
   ...props
 }: DefaultSelectProps<T> & ComponentProps<typeof Combobox>) {
   const [selected, setSelected] = useState<T | null>(defaultValue || null)
   const [query, setQuery] = useState("")
   const items = useItems(_items)
-
-  useEffect(() => defaultValue && setSelected(defaultValue), [defaultValue])
 
   const filteredItems =
     query !== ""
@@ -155,11 +163,19 @@ function SearchSelect<T extends string | { name: string }>({
         )
       : items
 
+  function onChange(value: T) {
+    setSelected(value)
+
+    if (typeof _onChange === "function") {
+      _onChange(value)
+    }
+  }
+
   useEffect(() => setSelected(defaultValue || null), [defaultValue])
 
   return (
     <div className="relative mt-5">
-      <Combobox {...props} value={selected} onChange={setSelected}>
+      <Combobox {...props} value={selected} onChange={onChange}>
         {({ open }) => (
           <>
             <Combobox.Button className="w-full">
