@@ -9,7 +9,7 @@ import { Button as AriaButton } from "react-aria-components"
 import { twMerge } from "tailwind-merge"
 
 const variants = cva(
-  "transition-all outline-none text-white data-[pressed]:scale-95 duration-200 data-[focus-visible]:ring-2",
+  "transition-all outline-none text-white data-[pressed]:scale-95 duration-200 data-[focus-visible]:ring-2 disabled:opacity-60",
   {
     variants: {
       plain: {

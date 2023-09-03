@@ -44,7 +44,13 @@ export default async function Home() {
         // defaultValue={images[0].date}
       />
       <Select label="Image" items={db.query.images.findMany()} />
-      <Select label="Animal" items={["Cat", "Dog", "Horse"]} />
+      <Select
+        label="Animal"
+        items={["Cat", "Dog", "Horse"]}
+        description="You like animals, don't you?"
+        // error="Really?!"
+        // defaultValue="Dog"
+      />
       <Button type="submit">Click me!</Button>
     </form>
   )
