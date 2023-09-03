@@ -1,7 +1,6 @@
 "use client"
 
 import { Children, cloneElement, isValidElement, useState } from "react"
-import { experimental_useFormStatus as useFormStatus } from "react-dom"
 import type { ComponentProps } from "react"
 
 type FormProps<T> = {
@@ -23,18 +22,16 @@ export default function Form<T>({
 
   return (
     <form action={action} {...props}>
-      {useFormChildren(children, setFormData, errors)}
+      {getFormChildren(children, errors, setFormData)}
     </form>
   )
 }
 
-function useFormChildren<T>(
+function getFormChildren<T>(
   children: React.ReactNode,
-  setFormData: React.Dispatch<React.SetStateAction<T>>,
   errors: Record<string, string> | undefined,
-) {
-  const { pending } = useFormStatus()
-
+  setFormData: React.Dispatch<React.SetStateAction<T>>,
+): React.ReactNode {
   return Children.map(children, child => {
     if (!isValidElement(child)) return
 
@@ -55,10 +52,16 @@ function useFormChildren<T>(
       })
     }
 
-    if (props.type === "submit") {
+    if (props.role === "group") {
       return cloneElement(child as JSX.Element, {
-        isDisabled: pending || undefined,
+        children: getFormChildren(props.children, errors, setFormData),
       })
     }
+
+    if (props.type === "submit") {
+      return cloneElement(child as JSX.Element)
+    }
+
+    return child
   })
 }
