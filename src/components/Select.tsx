@@ -15,15 +15,15 @@ import { useAsyncList } from "@react-stately/data"
 import { Button } from "."
 import Info from "./Info"
 
-type SelectProps<T extends object> = {
+type SelectProps<T extends object | string> = {
   description?: React.ReactNode
   error?: React.ReactNode
   label: React.ReactNode
   items: T[] | Promise<T[]>
-} & Omit<ComponentProps<typeof AriaSelect<T>>, "items">
+} & Omit<ComponentProps<typeof AriaSelect<T extends string ? {} : T>>, "items">
 
 export default function Select<
-  T extends object & { id: number; name: string },
+  T extends (object & { id: number; name: string }) | string,
 >({ children, description, error, label, items, ...props }: SelectProps<T>) {
   const [isOpen, setOpen] = useState(false)
   const list = useAsyncList<T>({
@@ -33,8 +33,6 @@ export default function Select<
       }
     },
   })
-
-  console.log(list)
 
   return (
     <AriaSelect
@@ -59,7 +57,7 @@ export default function Select<
       <Popover>
         <ListBox>
           {list.items.map((item, i) => (
-            <Item key={i}>{item.name}</Item>
+            <Item key={i}>{typeof item === "string" ? item : item.name}</Item>
           ))}
         </ListBox>
       </Popover>
