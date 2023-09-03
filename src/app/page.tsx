@@ -43,11 +43,16 @@ export default async function Home() {
         // error="Ain't a date, lad."
         // defaultValue={images[0].date}
       />
-      <Select label="Image" items={db.query.images.findMany()} />
+      <Select
+        label="Image"
+        items={db.query.images.findMany()}
+        description="Images. Nice."
+      />
       <Select
         label="Animal"
         items={["Cat", "Dog", "Horse"]}
         description="You like animals, don't you?"
+        search
         // error="Really?!"
         // defaultValue="Dog"
       />
