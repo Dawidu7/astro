@@ -12,7 +12,7 @@ export const metadata: Metadata = {
 export default async function RootLayout({ children }: Children) {
   return (
     <html lang="en">
-      <body className="min-h-screen bg-zinc-800 text-lg text-white">
+      <body className="min-h-screen bg-zinc-800 pb-24 text-lg text-white">
         <Providers>
           <Navbar isAuthenticated={await isAuthenticated()} />
           <main className="flex justify-around">{children}</main>
