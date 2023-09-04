@@ -11,7 +11,7 @@ import { twMerge } from "tailwind-merge"
 import { Spinner } from "."
 
 const variants = cva(
-  "transition-all outline-none text-white text-center data-[pressed]:scale-95 duration-200 data-[focus-visible]:ring-2 disabled:opacity-60",
+  "transition-all outline-none text-white data-[pressed]:scale-95 duration-200 data-[focus-visible]:ring-2 disabled:opacity-60",
   {
     variants: {
       plain: {

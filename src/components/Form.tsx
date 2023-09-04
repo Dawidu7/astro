@@ -1,6 +1,12 @@
 "use client"
 
-import { Children, cloneElement, isValidElement, useState } from "react"
+import {
+  Children,
+  cloneElement,
+  isValidElement,
+  useEffect,
+  useState,
+} from "react"
 import type { ComponentProps } from "react"
 import { twMerge } from "tailwind-merge"
 import { validate } from "~/lib/actions"
@@ -8,7 +14,7 @@ import { getFormSchema } from "~/lib/utils"
 
 type FormProps<T> = {
   action: (formData: T) => Promise<void>
-  errors?: Record<string, string>
+  errors?: Record<string, string | undefined>
 } & Omit<ComponentProps<"form">, "action" | "onSubmit">
 
 export default function Form<T>({
@@ -35,11 +41,13 @@ export default function Form<T>({
     await _action(formData)
   }
 
+  useEffect(() => setErrors(prev => _errors || prev), [_errors])
+
   return (
     <form
       {...props}
       action={action}
-      className={twMerge("flex flex-col gap-4", className)}
+      className={twMerge("flex flex-col gap-6", className)}
     >
       {getFormChildren(children, errors, setFormData)}
     </form>
@@ -48,7 +56,7 @@ export default function Form<T>({
 
 function getFormChildren<T>(
   children: React.ReactNode,
-  errors: Record<string, string> | undefined,
+  errors: Record<string, string | undefined> | undefined,
   setFormData: React.Dispatch<React.SetStateAction<T>>,
 ): React.ReactNode {
   return Children.map(children, child => {

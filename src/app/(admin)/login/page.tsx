@@ -15,7 +15,6 @@ export default function Login({
   const errors = searchParams.error
     ? { password: "Invalid Password" }
     : undefined
-
   return (
     <Box className="w-fit" isSeparated>
       <h2 className="text-center text-3xl font-semibold">Login</h2>

@@ -42,8 +42,8 @@ type InputProps =
 
 const GROUP_CLASSNAME = "relative z-10"
 
-export default function Input({ type, ...props }: InputProps) {
-  switch (type) {
+export default function Input(props: InputProps) {
+  switch (props.type) {
     case "date":
       return <DateField {...(props as ComponentProps<typeof DateField>)} />
     case "number":

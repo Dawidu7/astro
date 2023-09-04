@@ -1,3 +1,5 @@
+"use client"
+
 import clsx from "clsx"
 import { Children, cloneElement } from "react"
 import type { ComponentProps } from "react"
