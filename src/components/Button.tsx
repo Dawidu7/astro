@@ -6,10 +6,12 @@ import clsx from "clsx"
 import { forwardRef } from "react"
 import type { ComponentProps } from "react"
 import { Button as AriaButton } from "react-aria-components"
+import { experimental_useFormStatus as useFormStatus } from "react-dom"
 import { twMerge } from "tailwind-merge"
+import { Spinner } from "."
 
 const variants = cva(
-  "transition-all outline-none text-white data-[pressed]:scale-95 duration-200 data-[focus-visible]:ring-2 disabled:opacity-60",
+  "transition-all outline-none text-white text-center data-[pressed]:scale-95 duration-200 data-[focus-visible]:ring-2 disabled:opacity-60",
   {
     variants: {
       plain: {
@@ -35,6 +37,7 @@ export default forwardRef<HTMLButtonElement, ButtonProps>(function Button(
   { children, className, plain, variant, ...props },
   forwardedRef,
 ) {
+  const { pending } = useFormStatus()
   variant = plain ? undefined : variant || "primary"
 
   return (
@@ -42,8 +45,9 @@ export default forwardRef<HTMLButtonElement, ButtonProps>(function Button(
       {...props}
       className={twMerge(clsx(variants({ plain, variant }), className))}
       ref={forwardedRef}
+      isDisabled={pending || undefined}
     >
-      {children}
+      {props.type === "submit" && pending ? <Spinner size={24} /> : children}
     </AriaButton>
   )
 })

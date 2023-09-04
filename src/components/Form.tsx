@@ -29,6 +29,8 @@ export default function Form<T>({
     }
 
     setErrors({})
+
+    await _action(formData)
   }
 
   return (

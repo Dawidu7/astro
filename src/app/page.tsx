@@ -4,7 +4,13 @@ import db from "~/db"
 async function action(formData: any) {
   "use server"
 
+  await wait(5000)
+
   console.log(formData)
+}
+
+function wait(ms: number) {
+  return new Promise(resolve => setTimeout(resolve, ms))
 }
 
 export default function Home() {
