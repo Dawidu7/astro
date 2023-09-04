@@ -1,43 +1,43 @@
 import type { InferInsertModel, InferSelectModel } from "drizzle-orm"
 import {
   date,
-  integer,
-  pgEnum,
-  pgTable,
+  int,
+  mysqlEnum,
+  mysqlTable,
   real,
   serial,
   unique,
   varchar,
-} from "drizzle-orm/pg-core"
+} from "drizzle-orm/mysql-core"
 
-export const admin = pgTable("admin", {
+export const admin = mysqlTable("admin", {
   id: serial("id").primaryKey(),
   password: varchar("password", { length: 60 }).notNull(),
 })
 
-export const cameras = pgTable("cameras", {
+export const cameras = mysqlTable("cameras", {
   id: serial("id").primaryKey(),
   name: varchar("name", { length: 255 }).notNull().unique(),
   matrixX: real("matrixX").notNull(),
   matrixY: real("matrixY").notNull(),
   pixelSize: real("pixelSize").notNull(),
-  resolutionX: integer("resolutionX").notNull(),
-  resolutionY: integer("resolutionY").notNull(),
+  resolutionX: int("resolutionX").notNull(),
+  resolutionY: int("resolutionY").notNull(),
 })
 
-export const catalogs = pgTable("catalogs", {
+export const catalogs = mysqlTable("catalogs", {
   id: serial("id").primaryKey(),
   name: varchar("name", { length: 255 }).notNull().unique(),
   value: varchar("value", { length: 255 }).notNull().unique(),
 })
 
-export const flattReducs = pgTable("flattReduc", {
+export const flattReducs = mysqlTable("flattReduc", {
   id: serial("id").primaryKey(),
   name: varchar("name", { length: 255 }).notNull().unique(),
   times: real("times").notNull().unique(),
 })
 
-export const images = pgTable("images", {
+export const images = mysqlTable("images", {
   id: serial("id").primaryKey(),
   name: varchar("name", { length: 255 }).notNull().unique(),
   imageUrl: varchar("imageUrl", { length: 255 }).notNull(),
@@ -55,32 +55,30 @@ export const images = pgTable("images", {
   sqml: varchar("sqml", { length: 255 }),
 })
 
-export const typeEnum = pgEnum("type", [
-  "angle",
-  "camera",
-  "catalog",
-  "constellation",
-  "filter",
-  "telescope",
-])
-
-export const options = pgTable(
+export const options = mysqlTable(
   "option",
   {
     id: serial("id").primaryKey(),
     name: varchar("name", { length: 255 }).notNull().unique(),
-    type: typeEnum("type").notNull(),
+    type: mysqlEnum("type", [
+      "angle",
+      "camera",
+      "catalog",
+      "constellation",
+      "filter",
+      "telescope",
+    ]).notNull(),
   },
   t => ({
     unq: unique().on(t.name, t.type),
   }),
 )
 
-export const telescopes = pgTable("telescopes", {
+export const telescopes = mysqlTable("telescopes", {
   id: serial("id").primaryKey(),
   name: varchar("name", { length: 255 }).notNull().unique(),
-  focalLength: integer("focalLength").notNull(),
-  diameter: integer("diameter").notNull(),
+  focalLength: int("focalLength").notNull(),
+  diameter: int("diameter").notNull(),
   focalRatio: real("focalRatio").notNull(),
 })
 

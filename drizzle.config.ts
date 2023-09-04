@@ -10,7 +10,7 @@ if (!process.env.DATABASE_URL) {
 export default {
   schema: "./src/db/schema.ts",
   out: "./src/db/migrations",
-  driver: "pg",
+  driver: "mysql2",
   dbCredentials: {
     connectionString: process.env.DATABASE_URL,
   },

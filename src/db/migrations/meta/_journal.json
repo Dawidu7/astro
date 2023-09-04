@@ -1,12 +1,12 @@
 {
   "version": "5",
-  "dialect": "pg",
+  "dialect": "mysql",
   "entries": [
     {
       "idx": 0,
       "version": "5",
-      "when": 1693613945522,
-      "tag": "0000_conscious_mad_thinker",
+      "when": 1693822920599,
+      "tag": "0000_light_ma_gnuci",
       "breakpoints": true
     }
   ]
