@@ -1,11 +1,8 @@
 import { compare } from "bcrypt"
-import dotenv from "dotenv"
 import { getServerSession } from "next-auth"
 import type { NextAuthOptions } from "next-auth"
 import Credentials from "next-auth/providers/credentials"
 import db from "~/db"
-
-dotenv.config({ path: ".env.local" })
 
 export const options: NextAuthOptions = {
   pages: {
