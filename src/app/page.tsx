@@ -1,3 +1,5 @@
+import { Link } from "~/components"
+
 export default async function Home() {
-  return <div>Home</div>
+  return <Link href="/dashboard">Home</Link>
 }
