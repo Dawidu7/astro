@@ -14,7 +14,7 @@ export default async function RootLayout({ children }: Children) {
       <body className="min-h-screen bg-zinc-800 text-lg text-white">
         <Providers>
           <Navbar />
-          <main className="">{children}</main>
+          <main className="flex justify-around">{children}</main>
           <Footer />
         </Providers>
       </body>

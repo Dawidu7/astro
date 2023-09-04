@@ -2,6 +2,7 @@
 
 import { Children, cloneElement, isValidElement, useState } from "react"
 import type { ComponentProps } from "react"
+import { twMerge } from "tailwind-merge"
 import { validate } from "~/lib/actions"
 import { getFormSchema } from "~/lib/utils"
 
@@ -13,6 +14,7 @@ type FormProps<T> = {
 export default function Form<T>({
   action: _action,
   children,
+  className,
   errors: _errors,
   ...props
 }: FormProps<T>) {
@@ -34,7 +36,11 @@ export default function Form<T>({
   }
 
   return (
-    <form action={action} {...props}>
+    <form
+      {...props}
+      action={action}
+      className={twMerge("flex flex-col gap-4", className)}
+    >
       {getFormChildren(children, errors, setFormData)}
     </form>
   )
