@@ -17,7 +17,12 @@ import {
 import { AiFillCaretDown, AiFillCaretUp } from "react-icons/ai"
 import { BsFillExclamationTriangleFill } from "react-icons/bs"
 import { twMerge } from "tailwind-merge"
-import { parseAbsoluteToLocal } from "@internationalized/date"
+import { getLocalTimeZone, parseAbsoluteToLocal } from "@internationalized/date"
+import type {
+  CalendarDate,
+  CalendarDateTime,
+  ZonedDateTime,
+} from "@internationalized/date"
 import { Button } from "."
 import Info from "./Info"
 
@@ -56,21 +61,34 @@ function DateField({
   description,
   error,
   label,
+  onChange: _onChange,
   ...props
 }: Omit<DefaultInputProps, "matcher"> &
   Omit<
     ComponentProps<typeof AriaDateField>,
     "className" | "defaultValue" | "onChange" | "value"
-  > & { defaultValue?: Date | string | null }) {
+  > & {
+    defaultValue?: Date | string | null
+    onChange?: (value: Date) => void
+  }) {
+  const [value, setValue] = useState<Date | string | null | undefined>(
+    defaultValue || null,
+  )
+
+  function onChange(value: CalendarDate | CalendarDateTime | ZonedDateTime) {
+    setValue(value.toDate(getLocalTimeZone()))
+
+    if (typeof _onChange === "function") {
+      _onChange(value.toDate(getLocalTimeZone()))
+    }
+  }
+
   return (
     <AriaDateField
       {...props}
       className={GROUP_CLASSNAME}
-      defaultValue={
-        defaultValue
-          ? parseAbsoluteToLocal(new Date(defaultValue).toISOString())
-          : undefined
-      }
+      value={value ? parseAbsoluteToLocal(new Date(value).toISOString()) : null}
+      onChange={onChange}
       granularity="day"
     >
       <DateInput
@@ -84,9 +102,12 @@ function DateField({
         {segment => (
           <DateSegment
             className={({ isPlaceholder }) =>
-              clsx(
-                "rounded outline-none transition duration-200 focus-within:bg-indigo-600",
-                isPlaceholder ? "text-zinc-400" : "text-white",
+              twMerge(
+                clsx(
+                  "rounded outline-none transition duration-200 focus-within:bg-indigo-600",
+                  isPlaceholder ? "text-zinc-400" : "text-white",
+                  isPlaceholder && error && "text-red-600",
+                ),
               )
             }
             segment={segment}

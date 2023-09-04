@@ -88,6 +88,7 @@ function _Select<
                   open ? "border-white" : "border-zinc-400",
                   open || selected ? "text-white" : "text-zinc-400",
                   error && "border-red-600",
+                  !(open || selected) && error && "text-red-600",
                 ),
               )}
             >

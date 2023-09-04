@@ -2,6 +2,8 @@
 
 import { Children, cloneElement, isValidElement, useState } from "react"
 import type { ComponentProps } from "react"
+import { validate } from "~/lib/actions"
+import { getFormSchema } from "~/lib/utils"
 
 type FormProps<T> = {
   action: (formData: T) => Promise<void>
@@ -11,13 +13,22 @@ type FormProps<T> = {
 export default function Form<T>({
   action: _action,
   children,
-  errors,
+  errors: _errors,
   ...props
 }: FormProps<T>) {
   const [formData, setFormData] = useState<T>({} as T)
+  const [errors, setErrors] = useState(_errors || {})
+  const schema = getFormSchema(children)
 
   async function action() {
-    console.log(formData)
+    const result = await validate(schema, formData)
+
+    if (!result.success) {
+      setErrors(result.issues || {})
+      return
+    }
+
+    setErrors({})
   }
 
   return (
