@@ -37,17 +37,24 @@ export default forwardRef<HTMLButtonElement, ButtonProps>(function Button(
   { children, className, plain, variant, ...props },
   forwardedRef,
 ) {
-  const { pending } = useFormStatus()
   variant = plain ? undefined : variant || "primary"
+  const { pending } = useFormStatus()
+  const isPending = props.type === "submit" && pending
 
   return (
     <AriaButton
       {...props}
-      className={twMerge(clsx(variants({ plain, variant }), className))}
+      className={twMerge(
+        clsx(
+          variants({ plain, variant }),
+          isPending && "flex items-center justify-center",
+          className,
+        ),
+      )}
       ref={forwardedRef}
       isDisabled={pending || undefined}
     >
-      {props.type === "submit" && pending ? <Spinner size={24} /> : children}
+      {isPending ? <Spinner size={32} /> : children}
     </AriaButton>
   )
 })
