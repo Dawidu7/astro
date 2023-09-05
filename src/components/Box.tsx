@@ -41,8 +41,12 @@ export default function Box({
               })}
               {i < count - 1 && (
                 <Separator
+                  className={clsx(
+                    "bg-zinc-400",
+                    className?.includes("flex-col") ? "h-px" : "w-px",
+                  )}
                   orientation={
-                    className?.includes("flex-col") ? "vertical" : "horizontal"
+                    className?.includes("flex-col") ? "horizontal" : "vertical"
                   }
                 />
               )}
