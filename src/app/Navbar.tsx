@@ -15,7 +15,8 @@ export default function Navbar({
   isAuthenticated: boolean
 }) {
   const pathname = usePathname()
-  const ref = useRef<HTMLElement>(null)
+  const navRef = useRef<HTMLElement>(null)
+  const listRef = useRef<HTMLUListElement>(null)
   const [isOpen, setOpen] = useState(false)
   const { setVisible } = useNavbar()
 
@@ -28,9 +29,10 @@ export default function Navbar({
   ]
 
   useEffect(() => {
-    const nav = ref.current
+    const nav = navRef.current
+    const ul = listRef.current
 
-    if (!nav) return
+    if (!nav || !ul) return
 
     const intersectionObserver = new IntersectionObserver(([entry]) => {
       setVisible(entry.isIntersecting)
@@ -45,9 +47,18 @@ export default function Navbar({
     intersectionObserver.observe(nav)
     resizeObserber.observe(nav)
 
+    function handleMouseUp(e: MouseEvent) {
+      if (!listRef.current?.contains(e.target as HTMLElement)) {
+        setOpen(false)
+      }
+    }
+
+    window.addEventListener("mouseup", handleMouseUp)
+
     return () => {
       intersectionObserver.disconnect()
       resizeObserber.disconnect()
+      window.removeEventListener("mouseup", handleMouseUp)
     }
   }, [setVisible])
 
@@ -108,7 +119,7 @@ export default function Navbar({
   return (
     <nav
       className="mb-12 flex items-center justify-between bg-zinc-900 p-4 shadow-md shadow-black"
-      ref={ref}
+      ref={navRef}
     >
       <Link href="/" className="text-2xl font-semibold text-white">
         Astrophotography by Patryk Tomalik
@@ -131,6 +142,7 @@ export default function Navbar({
           "fixed right-0 top-0 z-30 h-full space-y-4 bg-zinc-800 pl-20 pr-8 pt-6 text-right text-3xl transition duration-300 ease-in-out md:hidden",
           !isOpen && "translate-x-full",
         )}
+        ref={listRef}
       >
         <li>
           <Button
