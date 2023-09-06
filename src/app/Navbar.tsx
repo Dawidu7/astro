@@ -121,7 +121,7 @@ export default function Navbar({
       className="mb-12 flex items-center justify-between bg-zinc-900 p-4 shadow-md shadow-black"
       ref={navRef}
     >
-      <Link href="/" className="text-2xl font-semibold text-white">
+      <Link href="/" className="text-xl font-semibold text-white lg:text-3xl">
         Astrophotography by Patryk Tomalik
       </Link>
       <Button

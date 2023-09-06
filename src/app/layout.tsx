@@ -15,7 +15,7 @@ export default async function RootLayout({ children }: Children) {
       <body className="min-h-screen bg-zinc-800 pb-24 text-lg text-white">
         <Providers>
           <Navbar isAuthenticated={await isAuthenticated()} />
-          {children}
+          <main className="mx-4 flex justify-around">{children}</main>
           <Footer />
         </Providers>
       </body>
