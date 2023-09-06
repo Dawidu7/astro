@@ -1,31 +1,42 @@
 "use client"
 
 import clsx from "clsx"
-import { useSearchParams } from "next/navigation"
-import { Link } from "~/components"
+import { usePathname } from "next/navigation"
+import { Box, Link } from "~/components"
+
+const LINKS = [
+  "gallery",
+  "calculator",
+  "generator",
+  "planner",
+  "change-password",
+]
 
 export default function Tabs() {
-  const searchParams = useSearchParams()
+  const app = usePathname().split("/")[2]
 
   return (
-    <nav className="min-w-[8rem] p-4">
-      <ul className="space-y-4 capitalize">
-        {["gallery", "calculator", "generator", "planner"].map(link => (
-          <li key={link}>
-            <Link
-              className={clsx(
-                "transition-all",
-                searchParams.get("app") === link
-                  ? "border-l pl-2 font-semibold text-white"
-                  : "border-none",
-              )}
-              href={`/dashboard?app=${link}`}
+    <Box as="aside" className="fixed left-0 h-min w-60">
+      <nav className="p-4">
+        <ul className="space-y-4 capitalize">
+          {LINKS.map(link => (
+            <li
+              className={clsx("rounded p-2", app === link && "bg-zinc-700")}
+              key={link}
             >
-              {link}
-            </Link>
-          </li>
-        ))}
-      </ul>
-    </nav>
+              <Link
+                className={clsx(
+                  "transition-all",
+                  app === link && "font-semibold text-white",
+                )}
+                href={`/dashboard/${link}`}
+              >
+                {link}
+              </Link>
+            </li>
+          ))}
+        </ul>
+      </nav>
+    </Box>
   )
 }

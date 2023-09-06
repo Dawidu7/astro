@@ -7,19 +7,23 @@ import { twMerge } from "tailwind-merge"
 import { Separator } from "."
 
 type BoxProps = {
+  as?: keyof JSX.IntrinsicElements
   isSeparated?: boolean
 } & ComponentProps<"div">
 
 export default function Box({
+  as,
   children,
   className,
   isSeparated,
   ...props
 }: BoxProps) {
+  const Element = as || "div"
   const count = Children.count(children)
 
   return (
-    <div
+    // @ts-expect-error
+    <Element
       {...props}
       className={twMerge(
         clsx(
@@ -52,6 +56,6 @@ export default function Box({
               )}
             </>
           ))}
-    </div>
+    </Element>
   )
 }
