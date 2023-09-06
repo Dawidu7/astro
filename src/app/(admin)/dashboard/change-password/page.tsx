@@ -1,7 +1,7 @@
 import { compare, hash } from "bcrypt"
 import { eq } from "drizzle-orm"
 import { redirect } from "next/navigation"
-import { Box, Button, Form, Input } from "~/components"
+import { Box, Button, Form, Input, Separator } from "~/components"
 import db from "~/db"
 import { admin as _admin } from "~/db/schema"
 
@@ -65,14 +65,15 @@ export default async function ChangePassword({
     : undefined
 
   return (
-    <>
+    <Box className="w-fit">
       <h2 className="text-center text-3xl font-semibold">Change Password</h2>
+      <Separator />
       <Form action={changePassword} className="mt-4" errors={errors}>
         <Input label="Old Password" name="old" type="password" />
         <Input label="New Password" name="new" type="password" />
         <Input label="Confirm Password" name="confirm" type="password" />
         <Button type="submit">Change</Button>
       </Form>
-    </>
+    </Box>
   )
 }

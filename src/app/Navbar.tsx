@@ -155,7 +155,7 @@ export default function Navbar({
         </li>
         <List />
       </ul>
-      <ul className="hidden gap-2 text-base md:flex">
+      <ul className="hidden gap-4 text-base md:flex">
         <List />
       </ul>
     </nav>

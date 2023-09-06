@@ -12,6 +12,7 @@
     "@headlessui/react": "^1.7.17",
     "@internationalized/date": "^3.4.0",
     "@planetscale/database": "^1.11.0",
+    "@shrutibalasa/tailwind-grid-auto-fit": "^1.1.0",
     "@types/bcrypt": "^5.0.0",
     "@types/node": "20.5.8",
     "@types/react": "18.2.21",

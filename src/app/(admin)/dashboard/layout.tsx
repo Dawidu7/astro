@@ -1,11 +1,10 @@
 import Tabs from "./Tabs"
-import { Box } from "~/components"
 
 export default function Layout({ children }: Children) {
   return (
-    <>
+    <main className="space-y-8 sm:flex sm:space-y-0">
       <Tabs />
-      <Box className="w-fit max-w-4xl">{children}</Box>
-    </>
+      <div className="flex flex-1 justify-center">{children}</div>
+    </main>
   )
 }

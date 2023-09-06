@@ -1,3 +1,4 @@
+import { Box, Link } from "~/components"
 import db from "~/db"
 
 export default async function App({ params }: { params: { app: string } }) {
@@ -5,7 +6,23 @@ export default async function App({ params }: { params: { app: string } }) {
 
   if (!data) return "No App Found."
 
-  return <div>{JSON.stringify(data)}</div>
+  return (
+    <Box className="grid-auto-fit-xs mx-12 grid h-min gap-8">
+      {Object.entries(data).map(([table, values]) => (
+        <div key={table}>
+          <h3 className="flex justify-between font-semibold capitalize">
+            {table}
+            <Link href={`/dashboard/`}>+</Link>
+          </h3>
+          <ul>
+            {(values as any).map((value: any) => (
+              <li key={value.name}></li>
+            ))}
+          </ul>
+        </div>
+      ))}
+    </Box>
+  )
 }
 
 async function getData(app: string) {
