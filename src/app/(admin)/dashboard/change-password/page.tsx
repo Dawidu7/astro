@@ -65,7 +65,7 @@ export default async function ChangePassword({
     : undefined
 
   return (
-    <Box className="w-fit" isSeparated>
+    <>
       <h2 className="text-center text-3xl font-semibold">Change Password</h2>
       <Form action={changePassword} className="mt-4" errors={errors}>
         <Input label="Old Password" name="old" type="password" />
@@ -73,6 +73,6 @@ export default async function ChangePassword({
         <Input label="Confirm Password" name="confirm" type="password" />
         <Button type="submit">Change</Button>
       </Form>
-    </Box>
+    </>
   )
 }

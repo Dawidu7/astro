@@ -4,7 +4,7 @@ import clsx from "clsx"
 import { usePathname } from "next/navigation"
 import { Box, Link } from "~/components"
 
-const LINKS = [
+const APPS = [
   "gallery",
   "calculator",
   "generator",
@@ -16,27 +16,25 @@ export default function Tabs() {
   const app = usePathname().split("/")[2]
 
   return (
-    <Box as="aside" className="fixed left-0 h-min w-60">
-      <nav className="p-4">
-        <ul className="space-y-4 capitalize">
-          {LINKS.map(link => (
-            <li
-              className={clsx("rounded p-2", app === link && "bg-zinc-700")}
-              key={link}
+    <Box as="aside" className="fixed left-0 h-min w-52 px-4">
+      <ul className="space-y-4 capitalize">
+        {APPS.map(_app => (
+          <li
+            className={clsx("rounded p-2", app === _app && "bg-zinc-700")}
+            key={_app}
+          >
+            <Link
+              className={clsx(
+                "transition-all",
+                app === _app && "font-semibold text-white",
+              )}
+              href={`/dashboard/${_app}`}
             >
-              <Link
-                className={clsx(
-                  "transition-all",
-                  app === link && "font-semibold text-white",
-                )}
-                href={`/dashboard/${link}`}
-              >
-                {link}
-              </Link>
-            </li>
-          ))}
-        </ul>
-      </nav>
+              {_app}
+            </Link>
+          </li>
+        ))}
+      </ul>
     </Box>
   )
 }

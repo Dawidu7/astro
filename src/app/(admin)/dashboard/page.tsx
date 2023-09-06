@@ -1,3 +1,17 @@
-export default async function Dashboard() {
-  return <div>Dashboard</div>
+import { Link } from "~/components"
+
+export default function Dashboard() {
+  return (
+    <>
+      <ul className="grid grid-cols-2 gap-8 capitalize">
+        {["calculator", "gallery", "generator", "planner"].map(app => (
+          <li className="rounded-lg border text-center" key={app}>
+            <Link className="" href={`/dashboard/${app}`}>
+              {app}
+            </Link>
+          </li>
+        ))}
+      </ul>
+    </>
+  )
 }

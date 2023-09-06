@@ -1,10 +1,11 @@
 import Tabs from "./Tabs"
+import { Box } from "~/components"
 
 export default function Layout({ children }: Children) {
   return (
     <>
       <Tabs />
-      <section className="flex flex-1 justify-center">{children}</section>
+      <Box className="w-fit max-w-4xl">{children}</Box>
     </>
   )
 }
