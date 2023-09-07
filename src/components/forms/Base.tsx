@@ -1,20 +1,23 @@
 import type { ComponentProps } from "react"
-import { Button, Form, Input, Link, Group, Modal } from ".."
+import { twMerge } from "tailwind-merge"
+import { Button, Form, Input, Group, Link } from ".."
 
-export default function Base({
+export default function Base<I, S extends { id: number; name: string }>({
   children,
-  hasDefault,
-  onDelete,
+  className,
+  defaultValue,
   ...props
-}: ComponentProps<typeof Form> & {
-  hasDefault: boolean
-  onDelete: () => Promise<void>
+}: Omit<ComponentProps<typeof Form>, "action" | "defaultValue"> & {
+  action: (formData: I) => Promise<void>
+  defaultValue?: S
 }) {
   return (
-    <Form {...props}>
+    <Form {...props} className={twMerge("mt-2 p-4", className)}>
+      <Input label="Name" name="name" defaultValue={defaultValue?.name} />
       {children}
       <Group>
-        <Button type="submit">{hasDefault ? "Update" : "Create"}</Button>
+        {defaultValue && <Button></Button>}
+        <Button type="submit">{defaultValue ? "Update" : "Create"}</Button>
       </Group>
     </Form>
   )

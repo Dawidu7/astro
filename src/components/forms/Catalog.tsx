@@ -1,14 +1,15 @@
+import { redirect } from "next/navigation"
 import Base from "./Base"
-import { Button, Form, Input } from ".."
-import { InsertCatalog, SelectCatalog } from "~/db/schema"
+import { Input } from ".."
+import db from "~/db"
+import { catalogs } from "~/db/schema"
+import type { InsertCatalog, SelectCatalog } from "~/db/schema"
 
-export default function Catalog({
-  default: _default,
-}: {
-  default?: SelectCatalog
-}) {
+export default function Catalog() {
   async function create(formData: InsertCatalog) {
     "use server"
+
+    const { insertId } = await db.insert(catalogs).values(formData)
   }
 
   async function update(formData: InsertCatalog) {
@@ -16,9 +17,8 @@ export default function Catalog({
   }
 
   return (
-    <Base action={_default ? update : create} hasDefault={!!_default}>
-      <Input label="Name" name="name" defaultValue={_default?.name} />
-      <Input label="Value" name="value" defaultValue={_default?.value} />
+    <Base<InsertCatalog, SelectCatalog> action={create}>
+      <Input label="Value" name="value" />
     </Base>
   )
 }

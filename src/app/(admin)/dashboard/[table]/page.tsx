@@ -1,22 +1,27 @@
-import { eq } from "drizzle-orm"
-import { Box } from "~/components"
+import { Box, Separator } from "~/components"
 import forms from "~/components/forms"
-import db from "~/db"
-import {
-  cameras,
-  catalogs,
-  flattReducs,
-  images,
-  options,
-  telescopes,
-} from "~/db/schema"
 
-export default async function Table<T>({
+export default async function Table({
   params,
   searchParams,
 }: {
-  params: { table: string }
-  searchParams: { id?: string }
+  params: { table: keyof typeof forms }
+  searchParams: {
+    id?: string
+    type?: string
+  }
 }) {
-  return <Box className="w-fit"></Box>
+  const Form = forms[params.table]
+
+  if (!Form) return "No Form Found."
+
+  return (
+    <Box className="w-fit p-0">
+      <h3 className="p-4 text-center text-4xl font-semibold">
+        Create {params.table}
+      </h3>
+      <Separator />
+      <Form />
+    </Box>
+  )
 }
