@@ -17,7 +17,7 @@ export default async function Table({
 
   return (
     <Box className="w-fit p-0">
-      <h3 className="p-4 text-center text-4xl font-semibold">
+      <h3 className="p-4 text-center text-4xl font-semibold capitalize">
         Create {params.table}
       </h3>
       <Separator />

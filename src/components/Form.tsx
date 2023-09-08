@@ -26,9 +26,11 @@ export default function Form<T>({
   errors: _errors,
   ...props
 }: FormProps<T>) {
-  const [formData, setFormData] = useState<T>({} as T)
+  const [formData, setFormData] = useState<T>(defaultValues || ({} as T))
   const [errors, setErrors] = useState(_errors || {})
   const schema = getFormSchema(children)
+
+  console.log(formData)
 
   async function action() {
     const result = await validate(schema, formData)
@@ -51,7 +53,7 @@ export default function Form<T>({
       action={action}
       className={twMerge("flex flex-col gap-6", className)}
     >
-      {getFormChildren(children, defaultValues, errors, setFormData)}
+      {getFormChildren(children, formData, errors, setFormData)}
     </form>
   )
 }
@@ -85,7 +87,7 @@ function getFormChildren<T>(
       })
     }
 
-    if (props.role === "group") {
+    if (props.role === "group" || props.separator) {
       return cloneElement(child as JSX.Element, {
         children: getFormChildren(
           props.children,
