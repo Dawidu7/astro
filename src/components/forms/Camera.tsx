@@ -1,9 +1,5 @@
-import { eq } from "drizzle-orm"
-import { revalidatePath } from "next/cache"
-import { redirect } from "next/navigation"
 import Base from "./Base"
 import { Input, Group } from ".."
-import db from "~/db"
 import { cameras } from "~/db/schema"
 import type { InsertCamera } from "~/db/schema"
 
@@ -12,51 +8,8 @@ export default async function Camera({
 }: {
   searchParams: { id?: string }
 }) {
-  const defaultValue = searchParams.id
-    ? (
-        await db
-          .select()
-          .from(cameras)
-          .where(eq(cameras.id, parseInt(searchParams.id)))
-      )[0]
-    : undefined
-
-  async function create(formData: InsertCamera) {
-    "use server"
-
-    await db.insert(cameras).values(formData)
-
-    revalidatePath("/dashboard")
-    redirect("/dashboard")
-  }
-
-  async function update(formData: InsertCamera) {
-    "use server"
-
-    await db
-      .update(cameras)
-      .set(formData)
-      .where(eq(cameras.id, parseInt(searchParams.id!)))
-
-    revalidatePath("/dashboard")
-    redirect("/dashboard")
-  }
-
-  async function remove() {
-    "use server"
-
-    await db.delete(cameras).where(eq(cameras.id, parseInt(searchParams.id!)))
-
-    revalidatePath("/dashboard")
-    redirect("/dashboard")
-  }
-
   return (
-    <Base<InsertCamera>
-      action={searchParams.id ? update : create}
-      defaultValues={defaultValue}
-      onDelete={remove}
-    >
+    <Base<InsertCamera> defaultId={searchParams.id} schema={cameras}>
       <Group separator="x">
         <Input
           label="Resolution X"
