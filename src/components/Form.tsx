@@ -30,8 +30,6 @@ export default function Form<T>({
   const [errors, setErrors] = useState(_errors || {})
   const schema = getFormSchema(children)
 
-  console.log(formData)
-
   async function action() {
     const result = await validate(schema, formData)
 
