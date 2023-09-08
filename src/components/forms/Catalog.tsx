@@ -4,13 +4,22 @@ import Base from "./Base"
 import { Input } from ".."
 import db from "~/db"
 import { catalogs } from "~/db/schema"
-import type { InsertCatalog, SelectCatalog } from "~/db/schema"
+import type { InsertCatalog } from "~/db/schema"
 
-export default function Catalog({
+export default async function Catalog({
   searchParams,
 }: {
   searchParams: { id?: string }
 }) {
+  const defaultValue = searchParams.id
+    ? (
+        await db
+          .select()
+          .from(catalogs)
+          .where(eq(catalogs.id, parseInt(searchParams.id)))
+      )[0]
+    : undefined
+
   async function create(formData: InsertCatalog) {
     "use server"
 
@@ -31,8 +40,9 @@ export default function Catalog({
   }
 
   return (
-    <Base<InsertCatalog, SelectCatalog>
+    <Base<InsertCatalog>
       action={searchParams.id ? update : create}
+      defaultValues={defaultValue}
     >
       <Input label="Value" name="value" />
     </Base>

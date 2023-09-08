@@ -14,6 +14,7 @@ import { getFormSchema } from "~/lib/utils"
 
 type FormProps<T> = {
   action: (formData: T) => Promise<void>
+  defaultValues?: T
   errors?: Record<string, string | undefined>
 } & Omit<ComponentProps<"form">, "action" | "onSubmit">
 
@@ -21,6 +22,7 @@ export default function Form<T>({
   action: _action,
   children,
   className,
+  defaultValues,
   errors: _errors,
   ...props
 }: FormProps<T>) {
@@ -49,13 +51,14 @@ export default function Form<T>({
       action={action}
       className={twMerge("flex flex-col gap-6", className)}
     >
-      {getFormChildren(children, errors, setFormData)}
+      {getFormChildren(children, defaultValues, errors, setFormData)}
     </form>
   )
 }
 
 function getFormChildren<T>(
   children: React.ReactNode,
+  defaultValues: T | undefined,
   errors: Record<string, string | undefined> | undefined,
   setFormData: React.Dispatch<React.SetStateAction<T>>,
 ): React.ReactNode {
@@ -74,6 +77,9 @@ function getFormChildren<T>(
       }
 
       return cloneElement(child as JSX.Element, {
+        defaultValue: defaultValues
+          ? defaultValues[props.name as keyof typeof defaultValues]
+          : undefined,
         error: errors ? errors[props.name] : undefined,
         onChange,
       })
@@ -81,7 +87,12 @@ function getFormChildren<T>(
 
     if (props.role === "group") {
       return cloneElement(child as JSX.Element, {
-        children: getFormChildren(props.children, errors, setFormData),
+        children: getFormChildren(
+          props.children,
+          defaultValues,
+          errors,
+          setFormData,
+        ),
       })
     }
 

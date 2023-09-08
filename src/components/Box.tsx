@@ -1,10 +1,6 @@
-"use client"
-
 import clsx from "clsx"
-import { Children, cloneElement } from "react"
 import type { ComponentProps } from "react"
 import { twMerge } from "tailwind-merge"
-import { Separator } from "."
 
 type BoxProps = {
   as?: keyof JSX.IntrinsicElements
@@ -19,7 +15,6 @@ export default function Box({
   ...props
 }: BoxProps) {
   const Element = as || "div"
-  const count = Children.count(children)
 
   return (
     // @ts-expect-error

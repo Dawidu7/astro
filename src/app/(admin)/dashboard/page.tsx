@@ -20,7 +20,11 @@ export default async function Dashboard() {
                 </h4>
                 <ul>
                   {values.map((value: any) => (
-                    <li key={value.id}>{value.name}</li>
+                    <li key={value.id}>
+                      <Link href={`/dashboard/${table}?id=${value.id}`}>
+                        {value.name}
+                      </Link>
+                    </li>
                   ))}
                 </ul>
               </div>
