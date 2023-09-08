@@ -21,7 +21,7 @@ export default async function Table({
         Create {params.table}
       </h3>
       <Separator />
-      <Form />
+      <Form searchParams={searchParams} />
     </Box>
   )
 }
