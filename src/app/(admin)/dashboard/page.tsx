@@ -16,12 +16,20 @@ export default async function Dashboard() {
               <div className="" key={table}>
                 <h4 className="flex justify-between font-semibold">
                   {table}
-                  <Link href={`/dashboard/${table}`}>+</Link>
+                  <Link
+                    href={`/dashboard/${app === "planner" ? "options" : table}`}
+                  >
+                    +
+                  </Link>
                 </h4>
                 <ul>
                   {values.map((value: any) => (
                     <li key={value.id}>
-                      <Link href={`/dashboard/${table}?id=${value.id}`}>
+                      <Link
+                        href={`/dashboard/${
+                          app === "planner" ? "options" : table
+                        }?id=${value.id}`}
+                      >
                         {value.name}
                       </Link>
                     </li>
@@ -51,19 +59,23 @@ async function getData() {
     calculator: { cameras, flattReducs, telescopes },
     gallery: { images },
     generator: { catalogs },
-    planner: options.reduce((acc, option) => {
-      const types = acc[option.type as keyof typeof acc]
+    planner: options.reduce(
+      (acc, option) => {
+        const types = acc[option.type as keyof typeof acc]
 
-      return {
-        ...acc,
-        [option.type]: types ? [...types, option] : [types],
-      }
-    }, {}) as {
-      [K in SelectOption["type"]]: {
-        id: number
-        name: string
-        type: K
-      }[]
-    },
+        return {
+          ...acc,
+          [option.type]: types ? [...types, option] : [option],
+        }
+      },
+      {
+        angle: [] as SelectOption[],
+        camera: [] as SelectOption[],
+        catalog: [] as SelectOption[],
+        constellation: [] as SelectOption[],
+        filter: [] as SelectOption[],
+        telescope: [] as SelectOption[],
+      },
+    ),
   }
 }
