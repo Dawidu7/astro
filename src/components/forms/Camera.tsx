@@ -1,6 +1,5 @@
 import Base from "./Base"
 import { Input, Group } from ".."
-import { cameras } from "~/db/schema"
 import type { InsertCamera } from "~/db/schema"
 
 export default async function Camera({
@@ -9,7 +8,7 @@ export default async function Camera({
   searchParams: { id?: string }
 }) {
   return (
-    <Base<InsertCamera> defaultId={searchParams.id} schema={cameras}>
+    <Base<InsertCamera> defaultId={searchParams.id} schema="cameras">
       <Group separator="x">
         <Input
           label="Resolution X"

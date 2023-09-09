@@ -1,11 +1,21 @@
 import { eq } from "drizzle-orm"
-import type { MySqlTableWithColumns, TableConfig } from "drizzle-orm/mysql-core"
+import type { MySqlTable, TableConfig } from "drizzle-orm/mysql-core"
 import { revalidatePath } from "next/cache"
 import { redirect } from "next/navigation"
 import type { ComponentProps } from "react"
 import { twMerge } from "tailwind-merge"
 import { Button, Form, Input, Group, Modal } from ".."
 import db from "~/db"
+import {
+  cameras,
+  catalogs,
+  flattReducs,
+  images,
+  options,
+  telescopes,
+} from "~/db/schema"
+
+const SCHEMAS = { cameras, catalogs, flattReducs, images, options, telescopes }
 
 export default async function Base<T extends { id?: number; name: string }>({
   children,
@@ -18,21 +28,21 @@ export default async function Base<T extends { id?: number; name: string }>({
   "action" | "defaultValue" | "defaultValues"
 > & {
   defaultId?: string
-  schema: MySqlTableWithColumns<TableConfig>
+  schema: keyof typeof SCHEMAS
 }) {
   const defaultValue = defaultId
     ? ((
         await db
           .select()
-          .from(schema)
-          .where(eq(schema.id, parseInt(defaultId)))
+          .from(SCHEMAS[schema])
+          .where(eq(SCHEMAS[schema].id, parseInt(defaultId)))
       )[0] as T)
     : undefined
 
   async function create(formData: T) {
     "use server"
 
-    await db.insert(schema).values(formData)
+    await db.insert(SCHEMAS[schema]).values(formData)
 
     revalidatePath("/dashboard")
     redirect("/dashboard")
@@ -41,7 +51,10 @@ export default async function Base<T extends { id?: number; name: string }>({
   async function update(formData: T) {
     "use server"
 
-    await db.update(schema).set(formData).where(eq(schema.id, defaultValue!.id))
+    await db
+      .update(SCHEMAS[schema])
+      .set(formData)
+      .where(eq(SCHEMAS[schema].id, defaultValue?.id || -1))
 
     revalidatePath("/dashboard")
     redirect("/dashboard")
@@ -50,7 +63,9 @@ export default async function Base<T extends { id?: number; name: string }>({
   async function remove() {
     "use server"
 
-    await db.delete(schema).where(eq(schema.id, defaultValue!.id))
+    await db
+      .delete(SCHEMAS[schema])
+      .where(eq(SCHEMAS[schema].id, defaultValue?.id || -1))
 
     revalidatePath("/dashboard")
     redirect("/dashboard")
@@ -59,14 +74,14 @@ export default async function Base<T extends { id?: number; name: string }>({
   return (
     <Form
       {...props}
-      action={defaultId ? update : create}
+      action={defaultValue ? update : create}
       className={twMerge("mt-2 p-4", className)}
       defaultValues={defaultValue}
     >
       <Input label="Name" name="name" />
       {children}
       <Group>
-        {defaultId && (
+        {defaultValue && (
           <Modal
             title="Confirm Delete"
             trigger={
@@ -76,7 +91,7 @@ export default async function Base<T extends { id?: number; name: string }>({
             }
           >
             <p>
-              Are you sure you want to delete <b>{defaultValue!.name}</b>?
+              Are you sure you want to delete <b>{defaultValue.name}</b>?
             </p>
             <form action={remove}>
               <Button
@@ -89,7 +104,7 @@ export default async function Base<T extends { id?: number; name: string }>({
             </form>
           </Modal>
         )}
-        <Button type="submit">{defaultId ? "Update" : "Create"}</Button>
+        <Button type="submit">{defaultValue ? "Update" : "Create"}</Button>
       </Group>
     </Form>
   )
