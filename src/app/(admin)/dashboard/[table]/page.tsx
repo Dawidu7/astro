@@ -6,10 +6,7 @@ export default async function Table({
   searchParams,
 }: {
   params: { table: keyof typeof forms }
-  searchParams: {
-    id?: string
-    type?: string
-  }
+  searchParams: { id?: string }
 }) {
   const Form = forms[params.table]
 

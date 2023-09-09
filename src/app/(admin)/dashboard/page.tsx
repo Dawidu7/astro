@@ -8,12 +8,16 @@ export default async function Dashboard() {
   return (
     <div className="grid w-full gap-8 capitalize grid-auto-fit-xl">
       {Object.entries(data).map(([app, tables]) => (
-        <Box className="p-0" key={app}>
-          <h3 className="p-4 text-2xl font-semibold">{app}</h3>
+        <Box
+          as="section"
+          className="h-min border border-zinc-900 p-0 transition-all duration-300 hover:cursor-pointer hover:border-zinc-700 hover:shadow-xl hover:shadow-black"
+          key={app}
+        >
+          <h3 className="p-4 text-center text-3xl font-semibold">{app}</h3>
           <Separator />
-          <div className="grid gap-4 p-4 grid-auto-fit-xs">
+          <ul className="grid gap-4 p-4 grid-auto-fit-[125px]">
             {Object.entries(tables).map(([table, values]) => (
-              <div className="" key={table}>
+              <li key={table}>
                 <h4 className="flex justify-between font-semibold">
                   {table}
                   <Link
@@ -35,9 +39,9 @@ export default async function Dashboard() {
                     </li>
                   ))}
                 </ul>
-              </div>
+              </li>
             ))}
-          </div>
+          </ul>
         </Box>
       ))}
     </div>
@@ -47,12 +51,24 @@ export default async function Dashboard() {
 async function getData() {
   const [cameras, catalogs, flattReducs, images, options, telescopes] =
     await Promise.all([
-      db.query.cameras.findMany(),
-      db.query.catalogs.findMany(),
-      db.query.flattReducs.findMany(),
-      db.query.images.findMany(),
-      db.query.options.findMany(),
-      db.query.telescopes.findMany(),
+      db.query.cameras.findMany({
+        orderBy: (cameras, { asc }) => [asc(cameras.name)],
+      }),
+      db.query.catalogs.findMany({
+        orderBy: (catalogs, { asc }) => [asc(catalogs.name)],
+      }),
+      db.query.flattReducs.findMany({
+        orderBy: (flattReducs, { asc }) => [asc(flattReducs.name)],
+      }),
+      db.query.images.findMany({
+        orderBy: (images, { asc }) => [asc(images.name)],
+      }),
+      db.query.options.findMany({
+        orderBy: (options, { asc }) => [asc(options.name)],
+      }),
+      db.query.telescopes.findMany({
+        orderBy: (telescopes, { asc }) => [asc(telescopes.name)],
+      }),
     ])
 
   return {
