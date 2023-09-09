@@ -1,11 +1,42 @@
+import { Box, Link } from "~/components"
 import db from "~/db"
 
-export default async function App({ params }: { params: { app: string } }) {
+export default async function App<T extends { id: number; name: string }>({
+  params,
+}: {
+  params: { app: string }
+}) {
   const data = await getData(params.app)
 
   if (!data) return "No Data Found."
 
-  return <div>{JSON.stringify(data)}</div>
+  return (
+    <Box as="ul" className="grid max-w-4xl gap-8 capitalize grid-auto-fit-sm">
+      {Object.entries(data).map(([table, values]) => (
+        <li key={table}>
+          <h3 className="flex justify-between text-xl font-semibold">
+            {table}
+            <Link
+              href={`/dashboard/actions/${table}?callbackApp=${params.app}`}
+            >
+              +
+            </Link>
+          </h3>
+          <ul>
+            {values.map((value: T) => (
+              <li key={value.id}>
+                <Link
+                  href={`/dashboard/actions/${table}?callbackApp=${params.app}&id=${value.id}`}
+                >
+                  {value.name}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </li>
+      ))}
+    </Box>
+  )
 }
 
 type Option<T extends string> = {

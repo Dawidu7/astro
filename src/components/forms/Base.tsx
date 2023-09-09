@@ -1,5 +1,4 @@
 import { eq } from "drizzle-orm"
-import type { MySqlTable, TableConfig } from "drizzle-orm/mysql-core"
 import { revalidatePath } from "next/cache"
 import { redirect } from "next/navigation"
 import type { ComponentProps } from "react"
@@ -21,6 +20,7 @@ export default async function Base<T extends { id?: number; name: string }>({
   children,
   className,
   defaultId,
+  redirectUrl,
   schema,
   ...props
 }: Omit<
@@ -28,6 +28,7 @@ export default async function Base<T extends { id?: number; name: string }>({
   "action" | "defaultValue" | "defaultValues"
 > & {
   defaultId: number | undefined
+  redirectUrl: string
   schema: keyof typeof SCHEMAS
 }) {
   const defaultValue = defaultId
@@ -44,8 +45,8 @@ export default async function Base<T extends { id?: number; name: string }>({
 
     await db.insert(SCHEMAS[schema]).values(formData)
 
-    revalidatePath("/dashboard")
-    redirect("/dashboard")
+    revalidatePath(redirectUrl)
+    redirect(redirectUrl)
   }
 
   async function update(formData: T) {
@@ -56,8 +57,8 @@ export default async function Base<T extends { id?: number; name: string }>({
       .set(formData)
       .where(eq(SCHEMAS[schema].id, defaultValue?.id || -1))
 
-    revalidatePath("/dashboard")
-    redirect("/dashboard")
+    revalidatePath(redirectUrl)
+    redirect(redirectUrl)
   }
 
   async function remove() {
@@ -67,8 +68,8 @@ export default async function Base<T extends { id?: number; name: string }>({
       .delete(SCHEMAS[schema])
       .where(eq(SCHEMAS[schema].id, defaultValue?.id || -1))
 
-    revalidatePath("/dashboard")
-    redirect("/dashboard")
+    revalidatePath(redirectUrl)
+    redirect(redirectUrl)
   }
 
   return (

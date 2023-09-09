@@ -2,9 +2,19 @@ import Base from "./Base"
 import { Input } from ".."
 import type { InsertTelescope } from "~/db/schema"
 
-export default function Telescope({ id }: { id: number | undefined }) {
+export default function Telescope({
+  id,
+  redirectUrl,
+}: {
+  id: number | undefined
+  redirectUrl: string
+}) {
   return (
-    <Base<InsertTelescope> defaultId={id} schema="telescopes">
+    <Base<InsertTelescope>
+      defaultId={id}
+      redirectUrl={redirectUrl}
+      schema="telescopes"
+    >
       <Input
         label="Focal Length"
         name="focalLength"

@@ -2,9 +2,19 @@ import Base from "./Base"
 import { Input, Group } from ".."
 import type { InsertCamera } from "~/db/schema"
 
-export default function Camera({ id }: { id: number | undefined }) {
+export default function Camera({
+  id,
+  redirectUrl,
+}: {
+  id: number | undefined
+  redirectUrl: string
+}) {
   return (
-    <Base<InsertCamera> defaultId={id} schema="cameras">
+    <Base<InsertCamera>
+      defaultId={id}
+      redirectUrl={redirectUrl}
+      schema="cameras"
+    >
       <Group separator="x">
         <Input
           label="Resolution X"
