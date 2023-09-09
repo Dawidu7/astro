@@ -21,7 +21,13 @@ export default async function Table({
         Create {params.table}
       </h3>
       <Separator />
-      <Form searchParams={searchParams} />
+      <Form
+        id={
+          searchParams.id && /^\d+$/.test(searchParams.id)
+            ? parseInt(searchParams.id)
+            : undefined
+        }
+      />
     </Box>
   )
 }

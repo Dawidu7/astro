@@ -27,7 +27,7 @@ export default async function Base<T extends { id?: number; name: string }>({
   ComponentProps<typeof Form>,
   "action" | "defaultValue" | "defaultValues"
 > & {
-  defaultId?: string
+  defaultId: number | undefined
   schema: keyof typeof SCHEMAS
 }) {
   const defaultValue = defaultId
@@ -35,7 +35,7 @@ export default async function Base<T extends { id?: number; name: string }>({
         await db
           .select()
           .from(SCHEMAS[schema])
-          .where(eq(SCHEMAS[schema].id, parseInt(defaultId)))
+          .where(eq(SCHEMAS[schema].id, defaultId))
       )[0] as T)
     : undefined
 

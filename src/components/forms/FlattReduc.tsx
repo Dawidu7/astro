@@ -2,13 +2,9 @@ import Base from "./Base"
 import { Input } from ".."
 import type { InsertFlattReduc } from "~/db/schema"
 
-export default async function FlattReduc({
-  searchParams,
-}: {
-  searchParams: { id?: string }
-}) {
+export default function FlattReduc({ id }: { id: number | undefined }) {
   return (
-    <Base<InsertFlattReduc> defaultId={searchParams.id} schema="flattReducs">
+    <Base<InsertFlattReduc> defaultId={id} schema="flattReducs">
       <Input
         label="Times"
         name="times"
