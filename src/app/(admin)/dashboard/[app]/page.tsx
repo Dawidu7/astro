@@ -11,7 +11,7 @@ export default async function App<T extends { id: number; name: string }>({
   if (!data) return "No Data Found."
 
   return (
-    <Box as="ul" className="grid max-w-4xl gap-8 capitalize grid-auto-fit-sm">
+    <Box as="ul" className="grid max-w-4xl gap-8 capitalize grid-auto-fit-lg">
       {Object.entries(data).map(([table, values]) => (
         <li key={table}>
           <h3 className="flex justify-between text-xl font-semibold">
@@ -22,7 +22,7 @@ export default async function App<T extends { id: number; name: string }>({
               +
             </Link>
           </h3>
-          <ul>
+          <ul className="grid gap-4 grid-auto-fit-xs">
             {values.map((value: T) => (
               <li key={value.id}>
                 <Link

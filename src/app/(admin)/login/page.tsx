@@ -16,7 +16,7 @@ export default function Login({
     ? { password: "Invalid Password" }
     : undefined
   return (
-    <Box className="w-fit space-y-6 p-0">
+    <Box as="main" className="mx-auto w-fit space-y-6 p-0">
       <h2 className="pt-4 text-center text-3xl font-semibold">Login</h2>
       <Separator />
       <Form action={login} className="mt-4 px-4 pb-4" errors={errors}>
