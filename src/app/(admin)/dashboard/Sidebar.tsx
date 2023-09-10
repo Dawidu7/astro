@@ -1,7 +1,8 @@
 "use client"
 
 import clsx from "clsx"
-import { usePathname, useSearchParams } from "next/navigation"
+import { usePathname, useRouter, useSearchParams } from "next/navigation"
+import { useEffect, useState } from "react"
 import { AiFillCaretDown, AiFillCaretUp } from "react-icons/ai"
 import { Box, Input, Link } from "~/components"
 
@@ -22,6 +23,8 @@ const LINKS = {
 export default function Sidebar() {
   const pathname = usePathname()
   const searchParams = useSearchParams()
+  const { replace } = useRouter()
+  const [query, setQuery] = useState(searchParams.get("q") || "")
 
   const _app = pathname.split("/")[2]
   const _tables = searchParams.get("tables")?.split(",")
@@ -36,9 +39,22 @@ export default function Sidebar() {
     return new URLSearchParams({ tables: tables.join(",") })
   }
 
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      replace(
+        `/dashboard/${_app}?${new URLSearchParams({
+          tables: [...searchParams.keys()].join(","),
+          q: query,
+        })}`,
+      )
+    }, 500)
+
+    return () => clearTimeout(timeout)
+  }, [_app, replace, searchParams, query])
+
   return (
     <Box as="aside" className="h-min w-fit space-y-4 pt-8">
-      <Input label="Search" />
+      <Input label="Search" onChange={value => setQuery(value)} />
       <ul className="space-y-2 capitalize">
         {Object.entries(LINKS).map(([app, tables]) => (
           <li key={app}>
