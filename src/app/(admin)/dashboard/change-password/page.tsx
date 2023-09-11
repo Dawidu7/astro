@@ -65,10 +65,12 @@ export default async function ChangePassword({
     : undefined
 
   return (
-    <Box className="w-fit">
-      <h2 className="text-center text-3xl font-semibold">Change Password</h2>
+    <Box className="w-fit p-0">
+      <h2 className="p-4 text-center text-3xl font-semibold">
+        Change Password
+      </h2>
       <Separator />
-      <Form action={changePassword} className="mt-4" errors={errors}>
+      <Form action={changePassword} className="mt-2 p-4" errors={errors}>
         <Input label="Old Password" name="old" type="password" />
         <Input label="New Password" name="new" type="password" />
         <Input label="Confirm Password" name="confirm" type="password" />

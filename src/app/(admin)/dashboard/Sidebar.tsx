@@ -91,6 +91,11 @@ export default function Sidebar() {
             </div>
           </li>
         ))}
+        <li>
+          <Link className="text-xl" href="/dashboard/change-password">
+            Change Password
+          </Link>
+        </li>
       </ul>
     </Box>
   )
