@@ -2,9 +2,9 @@ import Sidebar from "./Sidebar"
 
 export default function Layout({ children }: Children) {
   return (
-    <main className="flex">
+    <main className="sm:flex">
       <Sidebar />
-      <div className="flex h-min flex-1 justify-center">{children}</div>
+      <div className="mx-8 flex h-min flex-1 justify-center">{children}</div>
     </main>
   )
 }

@@ -44,7 +44,7 @@ export default function Sidebar() {
   }
 
   return (
-    <Box as="aside" className="w-fit space-y-4 pt-8">
+    <Box as="aside" className="h-min w-fit space-y-4 pt-8">
       <Input label="Search" onChange={value => setQuery(value)} />
       <ul className="space-y-2 capitalize">
         {Object.entries(LINKS).map(([app, tables]) => (

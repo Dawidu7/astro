@@ -1,14 +1,37 @@
+import { Box, Link } from "~/components"
 import db from "~/db"
 import type { SelectOption } from "~/db/schema"
 
-export default async function App({ params }: { params: { app: string } }) {
+export default async function App<T extends { id: number; name: string }>({
+  params,
+}: {
+  params: { app: string }
+}) {
   const data = await getData(params.app)
 
   if (!data) return "No Data Found."
 
-  console.log(data)
-
-  return <div>{params.app}</div>
+  return (
+    <div className="grid w-full gap-8 capitalize grid-auto-fit-lg">
+      {Object.entries(data).map(([table, values]) => (
+        <Box key={table}>
+          <h3 className="flex justify-between text-xl font-semibold">
+            {table}
+            <Link href={`/dashboard/${params.app}/${table}`}>+</Link>
+          </h3>
+          <ul className="grid grid-auto-fit-[150px]">
+            {values.map((value: T) => (
+              <li key={value.id}>
+                <Link href={`/dashboard/${params.app}/${table}?id=${value.id}`}>
+                  {value.name}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </Box>
+      ))}
+    </div>
+  )
 }
 
 async function getData(app: string) {
