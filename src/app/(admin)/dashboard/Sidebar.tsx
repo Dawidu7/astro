@@ -51,18 +51,26 @@ export default function Sidebar() {
           <li key={app}>
             <Link
               className={clsx(
-                "flex items-center justify-between",
+                "flex items-center justify-between text-xl",
                 app === params.app && "font-semibold text-white",
               )}
-              href={app === params.app ? "/dashboard" : `/dashboard/${app}`}
+              href={
+                !params.table && app === params.app
+                  ? "/dashboard"
+                  : `/dashboard/${app}`
+              }
             >
-              <span className="text-xl">{app}</span>
-              {app === params.app ? <AiFillCaretUp /> : <AiFillCaretDown />}
+              {app}
+              <span className={clsx("text-base", params.table && "hidden")}>
+                {app === params.app ? <AiFillCaretUp /> : <AiFillCaretDown />}
+              </span>
             </Link>
             <div
               className={clsx(
                 "grid pl-2.5 transition-[grid-template-rows] duration-300",
-                app === params.app ? "grid-rows-[1fr]" : "grid-rows-[0fr]",
+                !params.table && app === params.app
+                  ? "grid-rows-[1fr]"
+                  : "grid-rows-[0fr]",
               )}
             >
               <ul className="overflow-hidden">
