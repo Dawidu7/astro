@@ -3,17 +3,21 @@ import db from "~/db"
 
 export default async function App<T extends { id: number; name: string }>({
   params,
+  searchParams,
 }: {
   params: { app: string }
+  searchParams: { tables: string; q: string }
 }) {
   const data = await getData(params.app)
+
+  // filterData(data, searchParams.tables?.split(","), searchParams.q)
 
   if (!data) return "No Data Found."
 
   return (
-    <Box as="ul" className="grid max-w-4xl gap-8 capitalize grid-auto-fit-lg">
+    <ul className="grid w-full max-w-4xl gap-8 capitalize grid-auto-fit-lg">
       {Object.entries(data).map(([table, values]) => (
-        <li key={table}>
+        <Box as="li" key={table}>
           <h3 className="flex justify-between text-xl font-semibold">
             {table}
             <Link
@@ -33,10 +37,18 @@ export default async function App<T extends { id: number; name: string }>({
               </li>
             ))}
           </ul>
-        </li>
+        </Box>
       ))}
-    </Box>
+    </ul>
   )
+}
+
+function filterData<T extends { id: number; name: string }>(
+  data: Awaited<ReturnType<typeof getData>>,
+  tables: string[] | undefined,
+  q: string,
+) {
+  console.log(tables, q)
 }
 
 type Option<T extends string> = {

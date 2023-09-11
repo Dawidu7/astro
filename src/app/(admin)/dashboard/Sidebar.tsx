@@ -27,23 +27,31 @@ export default function Sidebar() {
   const [query, setQuery] = useState(searchParams.get("q") || "")
 
   const _app = pathname.split("/")[2]
-  const _tables = searchParams.get("tables")?.split(",")
+  const tables = searchParams.get("tables")?.split(",") as string[]
 
   function getSearchParams(table: string) {
-    const tables = _tables?.includes(table)
-      ? _tables.filter(_table => _table !== table)
-      : _tables
-      ? [..._tables, table]
-      : [table]
+    const _searchParams = new URLSearchParams(
+      Array.from(searchParams.entries()),
+    )
 
-    return new URLSearchParams({ tables: tables.join(",") })
+    _searchParams.set(
+      "tables",
+      (tables.includes(table)
+        ? tables.filter(_table => _table !== table)
+        : tables
+        ? [...tables, table]
+        : [table]
+      ).join(","),
+    )
+
+    return _searchParams
   }
 
   useEffect(() => {
     const timeout = setTimeout(() => {
       replace(
         `/dashboard/${_app}?${new URLSearchParams({
-          tables: [...searchParams.keys()].join(","),
+          tables: searchParams.get("tables") || "",
           q: query,
         })}`,
       )
@@ -56,7 +64,7 @@ export default function Sidebar() {
     <Box as="aside" className="h-min w-fit space-y-4 pt-8">
       <Input label="Search" onChange={value => setQuery(value)} />
       <ul className="space-y-2 capitalize">
-        {Object.entries(LINKS).map(([app, tables]) => (
+        {Object.entries(LINKS).map(([app, _tables]) => (
           <li key={app}>
             <Link
               className={clsx(
@@ -77,11 +85,11 @@ export default function Sidebar() {
               )}
             >
               <ul className="overflow-hidden">
-                {tables.map(table => (
+                {_tables.map(table => (
                   <li key={table}>
                     <Link
                       className={clsx(
-                        _tables?.includes(table) && "font-semibold text-white",
+                        tables.includes(table) && "font-semibold text-white",
                       )}
                       href={`/dashboard/${app}?${getSearchParams(table)}`}
                     >{`${table}s`}</Link>
