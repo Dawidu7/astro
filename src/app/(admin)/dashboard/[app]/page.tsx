@@ -16,7 +16,7 @@ export default async function App<T extends { id: number; name: string }>({
   if (!data) return "No Data Found."
 
   return (
-    <div className="grid w-full gap-8 capitalize grid-auto-fit-lg">
+    <div className="grid-auto-fill-lg grid w-full gap-8 capitalize">
       {Object.entries(filterData(data, searchParams)).map(([table, values]) => (
         <Box key={table}>
           <h3 className="flex justify-between text-xl font-semibold">

@@ -9,6 +9,9 @@ const config: Config = {
       },
     },
   },
-  plugins: [require("@shrutibalasa/tailwind-grid-auto-fit")],
+  plugins: [
+    require("@shrutibalasa/tailwind-grid-auto-fit"),
+    require("./src/lib/tailwind-grid-auto-fill"),
+  ],
 }
 export default config
