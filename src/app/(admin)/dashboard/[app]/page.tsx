@@ -2,10 +2,14 @@ import { Box, Link } from "~/components"
 import db from "~/db"
 import type { SelectOption } from "~/db/schema"
 
+type SearchParams = { tables?: string; q?: string }
+
 export default async function App<T extends { id: number; name: string }>({
   params,
+  searchParams,
 }: {
   params: { app: string }
+  searchParams: SearchParams
 }) {
   const data = await getData(params.app)
 
@@ -13,7 +17,7 @@ export default async function App<T extends { id: number; name: string }>({
 
   return (
     <div className="grid w-full gap-8 capitalize grid-auto-fit-lg">
-      {Object.entries(data).map(([table, values]) => (
+      {Object.entries(filterData(data, searchParams)).map(([table, values]) => (
         <Box key={table}>
           <h3 className="flex justify-between text-xl font-semibold">
             {table}
@@ -98,4 +102,20 @@ async function getData(app: string) {
     default:
       return null
   }
+}
+
+function filterData(
+  _data: NonNullable<Awaited<ReturnType<typeof getData>>>,
+  searchParams: SearchParams,
+) {
+  const _tables = searchParams.tables
+  const tables = _tables ? _tables.split(",") : null
+
+  const data = tables
+    ? Object.fromEntries(
+        Object.entries(_data).filter(([table]) => tables?.includes(table)),
+      )
+    : _data
+
+  return data
 }
