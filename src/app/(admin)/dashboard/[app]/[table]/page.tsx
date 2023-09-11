@@ -5,8 +5,8 @@ export default function Table({
   params,
   searchParams,
 }: {
-  params: { table: keyof typeof forms }
-  searchParams: { callbackApp?: string; id?: string }
+  params: { app: string; table: keyof typeof forms }
+  searchParams: { id?: string }
 }) {
   const Form = forms[params.table]
 
@@ -24,7 +24,7 @@ export default function Table({
             ? parseInt(searchParams.id)
             : undefined
         }
-        redirectUrl={`/dashboard/${searchParams.callbackApp || ""}`}
+        redirectUrl={`/dashboard/${params.app}`}
       />
     </Box>
   )

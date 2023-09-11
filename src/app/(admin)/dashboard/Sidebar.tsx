@@ -1,8 +1,7 @@
 "use client"
 
 import clsx from "clsx"
-import { usePathname, useRouter, useSearchParams } from "next/navigation"
-import { useEffect, useState } from "react"
+import { useParams, useRouter, useSearchParams } from "next/navigation"
 import { AiFillCaretDown, AiFillCaretUp } from "react-icons/ai"
 import { Box, Input, Link } from "~/components"
 
@@ -21,78 +20,61 @@ const LINKS = {
 }
 
 export default function Sidebar() {
-  const pathname = usePathname()
-  const searchParams = useSearchParams()
+  const params = useParams()
   const { replace } = useRouter()
-  const [query, setQuery] = useState(searchParams.get("q") || "")
+  const searchParams = useSearchParams()
 
-  const _app = pathname.split("/")[2]
-  const tables = searchParams.get("tables")?.split(",") as string[]
+  const _tables = searchParams.get("tables")
+  const selectedTables = _tables ? _tables.split(",") : []
 
   function getSearchParams(table: string) {
-    const _searchParams = new URLSearchParams(
-      Array.from(searchParams.entries()),
-    )
+    const sp = new URLSearchParams(Array.from(searchParams.entries()))
 
-    _searchParams.set(
+    sp.set(
       "tables",
-      (tables.includes(table)
-        ? tables.filter(_table => _table !== table)
-        : tables
-        ? [...tables, table]
-        : [table]
+      (selectedTables?.includes(table)
+        ? selectedTables.filter(_table => _table !== table)
+        : [...selectedTables, table]
       ).join(","),
     )
 
-    return _searchParams
+    return sp
   }
 
-  useEffect(() => {
-    const timeout = setTimeout(() => {
-      replace(
-        `/dashboard/${_app}?${new URLSearchParams({
-          tables: searchParams.get("tables") || "",
-          q: query,
-        })}`,
-      )
-    }, 500)
-
-    return () => clearTimeout(timeout)
-  }, [_app, replace, searchParams, query])
-
   return (
-    <Box as="aside" className="h-min w-fit space-y-4 pt-8">
-      <Input label="Search" onChange={value => setQuery(value)} />
+    <Box as="aside" className="w-fit space-y-4 pt-8">
+      <Input label="Search" />
       <ul className="space-y-2 capitalize">
-        {Object.entries(LINKS).map(([app, _tables]) => (
+        {Object.entries(LINKS).map(([app, tables]) => (
           <li key={app}>
             <Link
               className={clsx(
-                "flex items-center justify-between text-xl",
-                _app === app && "font-semibold text-white",
+                "flex items-center justify-between",
+                app === params.app && "font-semibold text-white",
               )}
-              href={_app === app ? "/dashboard" : `/dashboard/${app}`}
+              href={app === params.app ? "/dashboard" : `/dashboard/${app}`}
             >
-              {app}
-              <span className="text-base">
-                {_app === app ? <AiFillCaretUp /> : <AiFillCaretDown />}
-              </span>
+              <span className="text-xl">{app}</span>
+              {app === params.app ? <AiFillCaretUp /> : <AiFillCaretDown />}
             </Link>
             <div
               className={clsx(
-                "grid grid-rows-[0fr] pl-4 transition-[grid-template-rows] duration-300",
-                _app === app && "grid-rows-[1fr]",
+                "grid pl-2.5 transition-[grid-template-rows] duration-300",
+                app === params.app ? "grid-rows-[1fr]" : "grid-rows-[0fr]",
               )}
             >
               <ul className="overflow-hidden">
-                {_tables.map(table => (
+                {tables.map(table => (
                   <li key={table}>
                     <Link
                       className={clsx(
-                        tables.includes(table) && "font-semibold text-white",
+                        selectedTables?.includes(table) &&
+                          "font-semibold text-white",
                       )}
                       href={`/dashboard/${app}?${getSearchParams(table)}`}
-                    >{`${table}s`}</Link>
+                    >
+                      {table}
+                    </Link>
                   </li>
                 ))}
               </ul>
