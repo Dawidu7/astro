@@ -2,6 +2,7 @@
 
 import clsx from "clsx"
 import { useParams, useRouter, useSearchParams } from "next/navigation"
+import { useEffect, useState } from "react"
 import { AiFillCaretDown, AiFillCaretUp } from "react-icons/ai"
 import { Box, Input, Link } from "~/components"
 
@@ -23,6 +24,7 @@ export default function Sidebar() {
   const params = useParams()
   const { replace } = useRouter()
   const searchParams = useSearchParams()
+  const [query, setQuery] = useState("")
 
   const _tables = searchParams.get("tables")
   const selectedTables = _tables ? _tables.split(",") : []
@@ -43,7 +45,7 @@ export default function Sidebar() {
 
   return (
     <Box as="aside" className="w-fit space-y-4 pt-8">
-      <Input label="Search" />
+      <Input label="Search" onChange={value => setQuery(value)} />
       <ul className="space-y-2 capitalize">
         {Object.entries(LINKS).map(([app, tables]) => (
           <li key={app}>
