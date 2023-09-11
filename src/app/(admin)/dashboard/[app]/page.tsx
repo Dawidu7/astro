@@ -17,7 +17,13 @@ export default async function App<T extends { id: number; name: string }>({
         <Box key={table}>
           <h3 className="flex justify-between text-xl font-semibold">
             {table}
-            <Link href={`/dashboard/${params.app}/${table}`}>+</Link>
+            <Link
+              href={`/dashboard/${params.app}/${
+                params.app === "planner" ? "option" : table
+              }${params.app === "planner" ? `?type=${table}` : ""}`}
+            >
+              +
+            </Link>
           </h3>
           <ul className="grid grid-auto-fit-[150px]">
             {values.map((value: T) => (
