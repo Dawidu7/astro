@@ -75,8 +75,8 @@ export default function Client({ catalogs }: { catalogs: SelectCatalog[] }) {
   }
 
   return (
-    <div className="flex w-full justify-evenly max-[560px]:flex-col">
-      <Box className="h-min pt-6 min-[560px]:w-fit">
+    <div className="flex w-full justify-evenly max-[560px]:flex-col max-[560px]:gap-8 max-[560px]:px-8">
+      <Box className="h-min pt-6 min-[561px]:w-fit">
         <Form action={addDS}>
           <Select
             label="Catalog"
@@ -87,7 +87,7 @@ export default function Client({ catalogs }: { catalogs: SelectCatalog[] }) {
           <Button type="submit">Add DS</Button>
         </Form>
       </Box>
-      <Box className="h-min p-0 min-[560px]:w-fit">
+      <Box className="h-min p-0 min-[561px]:w-fit">
         <Group className="p-4 text-base">
           <Button onPress={save}>Save</Button>
           <Button onPress={() => setDSs([])}>Delete All</Button>
