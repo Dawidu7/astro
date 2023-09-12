@@ -18,9 +18,9 @@ const variants = cva(
         false: "rounded shadow-md shadow-black px-3 py-1.5",
       },
       variant: {
-        primary: "bg-indigo-600 ring-white data-[hovered]:bg-indigo-700",
+        primary: "bg-[#375982] ring-white data-[hovered]:bg-[#375793]",
         secondary:
-          "bg-zinc-100 text-zinc-800 ring-indigo-600 data-[hovered]:bg-zinc-200",
+          "bg-zinc-100 text-zinc-800 ring-[#375982] data-[hovered]:bg-zinc-200",
         destructive: "bg-red-600 ring-white data-[hovered]:bg-red-700",
       },
     },

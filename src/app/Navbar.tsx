@@ -73,7 +73,7 @@ export default function Navbar({
               className={
                 pathname.split("/")[1] === route.split("/")[1]
                   ? "font-semibold text-white"
-                  : "data-[hovered]:text-[#365700]"
+                  : "data-[hovered]:text-[#375982]"
               }
               href={route}
             >
@@ -86,7 +86,7 @@ export default function Navbar({
             title="Confirm Logout"
             trigger={
               <Button
-                className="text-zinc-400 data-[hovered]:text-[#365700]"
+                className="text-zinc-400 data-[hovered]:text-[#375982]"
                 plain
               >
                 Logout
