@@ -1,47 +1,14 @@
-import { Box, Link } from "~/components"
 import db from "~/db"
 import type { SelectOption } from "~/db/schema"
+import Client from "./Client"
 
-type SearchParams = { tables?: string; q?: string }
-
-export default async function App<T extends { id: number; name: string }>({
-  params,
-  searchParams,
-}: {
-  params: { app: string }
-  searchParams: SearchParams
-}) {
+export default async function App({ params }: { params: { app: string } }) {
   const data = await getData(params.app)
 
   if (!data) return "No Data Found."
 
-  return (
-    <div className="grid-auto-fill-lg grid w-full gap-8 capitalize">
-      {Object.entries(filterData(data, searchParams)).map(([table, values]) => (
-        <Box key={table}>
-          <h3 className="flex justify-between text-xl font-semibold">
-            {table}
-            <Link
-              href={`/dashboard/${params.app}/${
-                params.app === "planner" ? "option" : table
-              }${params.app === "planner" ? `?type=${table}` : ""}`}
-            >
-              +
-            </Link>
-          </h3>
-          <ul className="grid grid-auto-fit-[150px]">
-            {values.map((value: T) => (
-              <li key={value.id}>
-                <Link href={`/dashboard/${params.app}/${table}?id=${value.id}`}>
-                  {value.name}
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </Box>
-      ))}
-    </div>
-  )
+  // @ts-expect-error
+  return <Client data={data} />
 }
 
 async function getData(app: string) {
@@ -102,20 +69,4 @@ async function getData(app: string) {
     default:
       return null
   }
-}
-
-function filterData(
-  _data: NonNullable<Awaited<ReturnType<typeof getData>>>,
-  searchParams: SearchParams,
-) {
-  const _tables = searchParams.tables
-  const tables = _tables ? _tables.split(",") : null
-
-  const data = tables
-    ? Object.fromEntries(
-        Object.entries(_data).filter(([table]) => tables?.includes(table)),
-      )
-    : _data
-
-  return data
 }
