@@ -3,7 +3,7 @@ import type { ComponentProps } from "react"
 import { twMerge } from "tailwind-merge"
 
 type BoxProps = {
-  as?: keyof JSX.IntrinsicElements
+  as?: keyof JSX.IntrinsicElements | React.ElementType
   noPadding?: boolean
 } & ComponentProps<"div">
 
@@ -17,7 +17,6 @@ export default function Box({
   const Element = as || "div"
 
   return (
-    // @ts-expect-error
     <Element
       {...props}
       className={twMerge(

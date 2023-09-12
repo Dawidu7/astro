@@ -1,3 +1,4 @@
+import { saveAs } from "file-saver"
 import { Children, isValidElement } from "react"
 import { date, minLength, minValue, number, object, string } from "valibot"
 
@@ -46,7 +47,7 @@ export function getFormSchema(
     }
 
     if (props.items) {
-      if (props.items[0]) {
+      if (typeof props.items[0] === "string") {
         return { ...acc, [props.name]: "string" }
       }
 
@@ -55,4 +56,10 @@ export function getFormSchema(
 
     return { ...acc, [props.name]: "string" }
   }, {})
+}
+
+export function saveFile(text: string[], filename: string, extension = "txt") {
+  const blob = new Blob(text, { type: "text/plain;charset=utf-8" })
+
+  saveAs(blob, `${filename}.${extension}`)
 }
